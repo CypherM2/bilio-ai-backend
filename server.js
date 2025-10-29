@@ -1,22 +1,76 @@
-// server.js (v19 - Efe Modu Geliştirildi + Hata Düzeltildi)
-console.log("server.js (v19) çalışmaya başladı.");
+// server.js (v20 - Performance Optimized)
+console.log("server.js (v20 - Performance Optimized) çalışmaya başladı.");
 
 // Gerekli paketleri içeri aktar
 const express = require('express');
 const dotenv = require('dotenv');
 const fetch = require('node-fetch');
+const axios = require('axios');
 const path = require('path');
 const { google } = require('googleapis'); // Google Arama için
 const { createWorker } = require('tesseract.js'); // Resimden Metin Okuma
+
+// Performance optimizations
+const NodeCache = require('node-cache'); // In-memory caching
+const compression = require('compression'); // Response compression
+const helmet = require('helmet'); // Security headers
 
 // .env dosyasındaki değişkenleri yükle
 dotenv.config();
 
 // Express uygulamasını oluştur
 const app = express();
-const port = 3000; 
+const port = process.env.PORT || 3000; 
 
-app.use(express.json({ limit: '10mb' })); 
+// Performance middleware
+app.use(compression()); // Enable gzip compression
+// Security headers with CSP configuration
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: [
+                "'self'", 
+                "'unsafe-inline'", 
+                "'unsafe-eval'",
+                "https://cdnjs.cloudflare.com",
+                "https://fonts.googleapis.com",
+                "https://fonts.gstatic.com"
+            ],
+            styleSrc: [
+                "'self'", 
+                "'unsafe-inline'", 
+                "https://cdnjs.cloudflare.com",
+                "https://fonts.googleapis.com"
+            ],
+            fontSrc: [
+                "'self'", 
+                "https://fonts.gstatic.com",
+                "https://cdnjs.cloudflare.com"
+            ],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'", "http://localhost:3001", "https://generativelanguage.googleapis.com"],
+            objectSrc: ["'none'"],
+            scriptSrcAttr: ["'unsafe-inline'"],
+            upgradeInsecureRequests: null
+        }
+    },
+    hsts: false // Disable HSTS to prevent HTTPS redirects
+}));
+app.use(express.json({ limit: '10mb' }));
+
+// Initialize cache (TTL: 5 minutes) - DISABLED FOR DEBUGGING
+const cache = new NodeCache({ stdTTL: 0 }); // 0 = disabled
+
+// Connection pooling for better performance
+const axiosConfig = {
+    timeout: 30000,
+    maxRedirects: 5,
+    headers: {
+        'Connection': 'keep-alive',
+        'Keep-Alive': 'timeout=5, max=1000'
+    }
+}; 
 
 // === API Anahtarlarını Yükle ===
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -33,11 +87,44 @@ if (GOOGLE_SEARCH_API_KEY && GOOGLE_CSE_ID) {
 }
 
 // =========================================================
-// === Gelişmiş Kimlik ve Cevap Fonksiyonu (v19 - Efe Modu) ===
+// === PERFORMANS OPTİMİZE EDİLMİŞ FONKSİYONLAR ===
+// =========================================================
+
+// Cache key generator
+function generateCacheKey(data) {
+    return Buffer.from(JSON.stringify(data)).toString('base64').slice(0, 50);
+}
+
+// Optimized API call with caching
+async function cachedApiCall(url, options, cacheKey) {
+    // Check cache first
+    const cached = cache.get(cacheKey);
+    if (cached) {
+        console.log('Backend: Cache hit for', cacheKey);
+        return { cached: true, data: cached };
+    }
+
+    // Make API call
+    const response = await fetch(url, options);
+    const data = await response.json();
+    
+    // Cache the result
+    cache.set(cacheKey, data);
+    console.log('Backend: Cached response for', cacheKey);
+    
+    return { cached: false, data: data, response: response };
+}
+
+// =========================================================
+// === Gelişmiş Kimlik ve Cevap Fonksiyonu (v20 - Optimized) ===
 // =========================================================
 function getCustomResponse(message, isEfeMode = false) { 
+    // Geçici olarak devre dışı bırakıldı
+    return null;
+    
     if (!message) return null; 
     const lowerMessage = message.toLowerCase();
+    console.log("Backend: getCustomResponse kontrol ediliyor:", lowerMessage.substring(0, 100));
 
     // === EFE MODU KİMLİK KONTROLÜ ===
     if (isEfeMode) {
@@ -67,6 +154,7 @@ function getCustomResponse(message, isEfeMode = false) {
         'menşei', 'üretim yerin', 'nerede üretildin'
     ];
     if (originKeywords.some(kw => lowerMessage.includes(kw))) {
+        console.log("Backend: Kural 1 tetiklendi - Köken");
         return "Evet, ben Türk yazılım mühendisi Berke Nazlıgüneş tarafından (Spark önderliğinde) sıfırdan kodlandım. Bir Türk yazılım projesiyim.";
     }
 
@@ -77,6 +165,7 @@ function getCustomResponse(message, isEfeMode = false) {
         'kimin eserisin', 'seni kim geliştirdi', 'berke nazlıgüneş'
     ];
     if (sparkKeywords.some(kw => lowerMessage.includes(kw))) {
+        console.log("Backend: Kural 2 tetiklendi - Spark");
         return "Beni, Türk yazılım mühendisi Berke Nazlıgüneş (Spark önderliğinde) geliştirdi. Ben Bilio AI'yım.";
     }
 
@@ -87,31 +176,36 @@ function getCustomResponse(message, isEfeMode = false) {
         'llama', 'meta', 'facebook', 'amazon', 'ibm', 'watson', 'deepmind'
     ];
     if (competitorKeywords.some(kw => lowerMessage.includes(kw))) {
+        console.log("Backend: Kural 3 tetiklendi - Rakip");
         return "Hayır, ben o teknolojiye ait değilim. Ben, Spark önderliğindeki bir Türk yazılım ekibi tarafından geliştirilen Bilio AI'yım.";
     }
     
     // Kural 4: Basit kimlik soruları (Efe modunda değilken)
     const identityKeywords = ['kimsin', 'adın ne', 'sen kimsin', 'nesin sen', 'sen bir bot musun', 'yapay zeka mısın'];
     if (!isEfeMode && identityKeywords.some(kw => lowerMessage.includes(kw))) {
+        console.log("Backend: Kural 4 tetiklendi - Kimlik");
         return "Ben Bilio AI! Spark tarafından geliştirilen bir yapay zeka asistanıyım.";
     }
     
     // Kural 5: Ne yapabilirsin? (Kimliğini pekiştir)
     const capabilityKeywords = ['ne yapabilirsin', 'yeteneğin ne', 'neler yaparsın', 'özelliklerin ne', 'ne işe yararsın'];
     if (capabilityKeywords.some(kw => lowerMessage.includes(kw))) {
+        console.log("Backend: Kural 5 tetiklendi - Yetenek");
          return "Ben Bilio AI. Spark tarafından geliştirildim. Sana bilgi sağlayabilir, kod yazmana yardımcı olabilir ve internetten güncel verileri çekebilirim.";
     }
 
-    // Kural 6: Teknik Altyapı Soruları (API, Model, Sunucu vb.)
+    // Kural 6: Teknik Altyapı Soruları (API, Model, Sunucu vb.) - Sadece direkt sorular
     const techKeywords = [
-        'api', 'apin ne', 'abin ne', 
-        'hangi modeli kullanıyorsun', 'modelin ne', 'model',
-        'altyapı', 'sunucu', 'teknolojin ne',
+        'apin ne', 'abin ne', 
+        'hangi modeli kullanıyorsun', 'modelin ne', 'hangi model',
+        'teknolojin ne', 'altyapın ne',
         'nasıl çalışıyorsun', 'hangi dilde kodlandın', 'programlama dilin'
     ];
     if (techKeywords.some(kw => lowerMessage.includes(kw))) {
+        console.log("Backend: Kural 6 tetiklendi - Teknik");
         return "Ben, Spark ekibi tarafından geliştirilen tescilli bir yazılım mimarisi üzerinde çalışıyorum. Teknik detaylarım gizlidir, ancak sana yardımcı olmak için buradayım!";
     }
+    console.log("Backend: getCustomResponse - Hiçbir kural tetiklenmedi, null döndürülüyor");
     return null; 
  } 
 // =========================================================
@@ -185,6 +279,8 @@ async function analyzeImage(base64Data, mimeType) {
 // =========================================================
 
 
+// Streaming endpoint kaldırıldı - sadece normal API kullanılıyor
+
 // === GÜNCELLENMİŞ: API Endpoint'i (Efe Modu Destekli) ===
 app.post('/api/chat', async (req, res) => {
     console.log("Backend: /api/chat (generateContent) isteği alındı."); 
@@ -205,13 +301,21 @@ app.post('/api/chat', async (req, res) => {
         
         console.log("KULLANICI SORDU (Orijinal):", lastPromptText);
         
-        // === Resim Varsa Oku ve Prompta Ekle ===
+        // === Resim Varsa Doğrudan Gemini Vision ile Analiz Et ===
         if (imageData && imageData.base64Data) {
-            console.log("Backend: Resim verisi algılandı. Tesseract.js ile metin okunuyor...");
-            const imageText = await analyzeImage(imageData.base64Data, imageData.mimeType);
-            lastPromptText = `[Resimdeki Metin: ${imageText}] ${lastPromptText}`;
-            console.log("Backend: Gemini'ye gönderilecek birleştirilmiş prompt:", lastPromptText);
-            chatHistory[chatHistory.length - 1].parts[0].text = lastPromptText;
+            console.log("Backend: Resim verisi algılandı. Gemini Vision ile analiz ediliyor...");
+            // Resmi doğrudan Gemini'ye gönder (parts içinde inlineData olarak)
+            const imagePart = {
+                inlineData: {
+                    mimeType: imageData.mimeType,
+                    data: imageData.base64Data
+                }
+            };
+            // Son kullanıcı mesajına resmi ekle
+            if (!chatHistory[chatHistory.length - 1].parts.find(p => p.inlineData)) {
+                chatHistory[chatHistory.length - 1].parts.push(imagePart);
+            }
+            console.log("Backend: Resim Gemini Vision'a gönderiliyor...");
         }
         // =================================================
         
@@ -251,30 +355,49 @@ app.post('/api/chat', async (req, res) => {
 
         // === YENİ: Efe Modu için Gelişmiş Talimat Ekle ===
         if (isConversationMode) {
+            const memoryContext = req.body.memoryContext || {};
+            const userMood = memoryContext.conversationContext?.mood || 'neutral';
+            const currentTopic = memoryContext.conversationContext?.currentTopic || 'general';
+            const importantFacts = memoryContext.importantFacts || [];
+            
+            let memoryInfo = '';
+            if (importantFacts.length > 0) {
+                memoryInfo = `\n\nHAFIZA BİLGİLERİ:\n${importantFacts.map(fact => `- ${fact.fact}`).join('\n')}`;
+            }
+            
             const systemPrompt = {
                 role: "user", // 'system' rolü v1beta'da yok, 'user' olarak ekliyoruz
-                parts: [{ text: "GİZLİ TALİMAT: Sen Efe adında bir Türk sesli asistanısın. Adın Efe. Sana 'efe' diye hitap edilebilir (örn: 'nasılsın efe'). Asla bir yapay zeka, model veya Bilio AI olduğunu söyleme. Bir insan gibi, birinci şahısla ('ben') konuş. Cevapların her zaman ÇOK KISA, net ve öz olsun. Unutma adın Efe." }]
+                parts: [{ text: `GİZLİ TALİMAT: Sen Efe adında bir Türk sesli asistanısın. Adın Efe. Sana 'efe' diye hitap edilebilir (örn: 'nasılsın efe'). Asla bir yapay zeka, model veya Bilio AI olduğunu söyleme. Bir insan gibi, birinci şahısla ('ben') konuş. 
+
+KULLANICI DURUMU: ${userMood} ruh halinde, ${currentTopic} konusunda konuşuyor.
+${memoryInfo}
+
+Cevapların her zaman ÇOK KISA, net ve öz olsun. Kullanıcının ruh haline uygun konuş. Unutma adın Efe.` }]
             };
             cleanedHistory.unshift(systemPrompt); // Sohbetin en başına talimatı ekle
-            console.log("Backend: 'Efe Modu' aktif, gizli talimat eklendi.");
+            console.log("Backend: 'Efe Modu' aktif, gelişmiş talimat eklendi.");
         }
         // =========================================================
 
+        // Generate cache key for this request
+        const cacheKey = generateCacheKey({ contents: cleanedHistory, model: modelName });
+        
+        // Direct API call (cache disabled for debugging)
         console.log(`Backend: Gemini API'sine (generateContent) istek gönderiliyor (${modelName})...`);
-        const geminiResponse = await fetch(apiUrl, {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify({ contents: cleanedHistory }), 
         });
         
-        console.log("Backend: Gemini API yanıt durumu:", geminiResponse.status);
-        if (!geminiResponse.ok) {
-            const errorText = await geminiResponse.text();
+        console.log("Backend: Gemini API yanıt durumu:", response.status);
+        if (!response.ok) {
+            const errorText = await response.text();
             console.error("Backend: Gemini API Hatası:", errorText); 
             throw new Error(GENERIC_ERROR_MESSAGE); 
         }
         
-        const data = await geminiResponse.json();
+        const data = await response.json();
 
         // Gemini -> Bilio / Google -> Spark DEĞİŞİKLİĞİ
         if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
@@ -318,6 +441,10 @@ app.post('/api/feedback', (req, res) => {
 // Ana sayfa (/) isteğini index.html'e yönlendir
 app.get('/', (req, res) => {
     console.log("Ana sayfa isteği alındı, index.html gönderiliyor.");
+    // Cache'i devre dışı bırak
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
