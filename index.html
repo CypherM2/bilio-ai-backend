@@ -1,44 +1,146 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilio AI - Gelişmiş Editör</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Favicon (inline SVG to avoid 404) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%2330d5c8'/%3E%3Ctext x='50' y='58' font-size='48' text-anchor='middle' fill='white' font-family='Arial'%3EB%3C/text%3E%3C/svg%3E">
+    <!-- Optimized external resources with preload -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" integrity="sha512-mIs9kKbPO6hQbfRMGwPuhvs3dUz0WZNFdrqJlWvmMBYzd5qnyAcQYeEVgmFm7QY0QtlRyZlpjBE2YhfvNwoS7w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet"></noscript>
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"></noscript>
 
     <style>
         /* ====================================================== */
-        /* == YENİ TASARIM (v18 - EFE MODU + ATAÇ) == */
+        /* == FUTURİSTİK AI TASARIM 2025 - NEXT LEVEL == */
         /* ====================================================== */
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+        }
         
         :root { 
-            --primary: #00A99D; --primary-text: #FFFFFF;
-            --bg-primary: #161618; --bg-secondary: #1D1D1F; --bg-tertiary: #3a3a3c; 
-            --bg-sidebar: rgba(44, 44, 46, 0.7); --bg-sidebar-hover: rgba(60, 60, 60, 0.9);
-            --bg-sidebar-active: var(--primary);
-            --bg-code: #272822; --bg-output: #1D1D1F;
-            --text-primary: #F5F5F7; --text-secondary: #a1a1a6; 
-            --border: rgba(90, 90, 90, 0.5); 
-            --error-red: #f16f6f; --success-green: #30d158;
-            --radius-lg: 20px; --radius-full: 30px; --radius-sm: 10px;
-            --radius-message: 18px; --transition: all 0.3s ease; 
+            /* Gemini Benzeri Renkler (mavi -> Türk turkuazı) */
+            --gemini-blue: #30D5C8;
+            --gemini-red: #ea4335;
+            --gemini-yellow: #fbbc04;
+            --gemini-green: #34a853;
+            
+            /* Ana Renkler (Türk turkuazı üzerine) */
+            --primary: #30D5C8; /* Turkish Turquoise */
+            --primary-hover: #22B9AD;
+            --primary-light: #70E5DB;
+            --primary-dark: #169B90;
+            --primary-text: #ffffff;
+            
+            /* Arka Planlar - Yumuşak koyu gri palet */
+            --bg-primary: #121417;
+            --bg-secondary: #161a20;
+            --bg-tertiary: #1b2027;
+            --bg-card: #141920;
+            --bg-sidebar: #14181e; 
+            --bg-sidebar-hover: #192029;
+            --bg-sidebar-active: #1c2330;
+            --bg-code: #1e1e1e; 
+            --bg-output: #1a1a1a;
+            --bg-glass: rgba(32, 32, 32, 0.9);
+            
+            /* Metin Renkleri */
+            --text-primary: #ffffff; 
+            --text-secondary: #ffffff; 
+            --text-muted: #aaaaaa;
+            
+            /* Neon Border ve Gölgeler */
+            --border: rgba(0, 255, 255, 0.15); 
+            --border-hover: rgba(0, 255, 255, 0.3);
+            --shadow-sm: 0 2px 8px rgba(0, 255, 255, 0.1);
+            --shadow-md: 0 4px 16px rgba(0, 255, 255, 0.2);
+            --shadow-lg: 0 8px 32px rgba(0, 255, 255, 0.3);
+            --shadow-xl: 0 16px 64px rgba(0, 255, 255, 0.4);
+            --shadow-glow: 0 0 30px rgba(0, 255, 255, 0.5);
+            --shadow-neon: none;
+            
+            /* Durum Renkleri */
+            --error-red: var(--neon-red); 
+            --success-green: var(--neon-green);
+            --warning-yellow: var(--neon-orange);
+            --info-blue: var(--neon-blue);
+            
+            /* Border Radius (4–8px aralığı) */
+            --radius-xs: 4px;
+            --radius-sm: 6px; 
+            --radius-md: 8px;
+            --radius-lg: 8px; 
+            --radius-xl: 12px;
+            --radius-full: 9999px; 
+            --radius-message: 8px; 
+            
+            /* Animasyonlar */
+            --transition-fast: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-normal: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
         }
 
         body { 
-            background-color: var(--bg-primary); 
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMxNjE2MTgiLz48cGF0aCBkPSJNNDAgMCBMNTQuMTQgMjUuODYgTDgwIDQwIEw1NC4xNCA1NC4xNCBMNDAgODAgTDI1Ljg2IDU0LjE0IEwwIDQwIEwyNS44NiAyNS44NiBaIiBmaWxsPSIjMWIxYjFkIiBmaWxsLW9wYWNpdHk9IjEuMCIvPjwvc3ZnPg==');
+            background: var(--bg-primary);
             color: var(--text-primary); 
-            display: flex; justify-content: center; align-items: center; 
+            margin: 0;
+            padding: 0;
             min-height: 100vh; 
-            padding: 20px; 
             overflow: hidden; 
-            transition: all 0.3s ease; /* YENİ: Efe modu için kararma */
+            transition: var(--transition-normal);
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                /* Gemini Dark Mode Subtle Effects */
+                radial-gradient(circle at 10% 20%, rgba(66, 133, 244, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(234, 67, 53, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 50% 10%, rgba(251, 188, 4, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 30% 70%, rgba(52, 168, 83, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 70% 30%, rgba(156, 39, 176, 0.03) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                /* Subtle Dark Mode Patterns */
+                repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.01) 4px, rgba(255, 255, 255, 0.01) 8px),
+                repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.01) 4px, rgba(255, 255, 255, 0.01) 8px);
+            pointer-events: none;
+            z-index: -1;
         }
         
         /* YENİ: Efe modu aktifken arayüzü gizle */
@@ -49,61 +151,307 @@
         }
 
         #main-container { 
-            display: flex; width: 100%; max-width: 1600px; height: 95vh; 
-            border-radius: var(--radius-lg); 
+            display: flex; 
+            width: 100vw; 
+            height: 100vh; 
+            border-radius: 0; 
             overflow: hidden; 
-            background: var(--bg-secondary); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            position: relative; 
-            transition: all 0.3s ease; /* YENİ: Efe modu için animasyon */
+            background: var(--bg-glass);
+            backdrop-filter: blur(30px);
+            border: none; 
+            box-shadow: none;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            transition: var(--transition-normal);
+            animation: none;
+        }
+        
+        #main-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(135deg, 
+                    rgba(66, 133, 244, 0.01) 0%, 
+                    rgba(234, 67, 53, 0.01) 25%, 
+                    rgba(251, 188, 4, 0.01) 50%, 
+                    rgba(52, 168, 83, 0.01) 75%, 
+                    rgba(156, 39, 176, 0.01) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Landing durumu: sayfa girişinde dış alanı blur yap, inputu ortaya yaklaştır */
+        body.landing::before {
+            backdrop-filter: blur(20px) saturate(1.05);
+            background: rgba(0, 0, 0, 0.35);
+        }
+        body.landing #chat-container { display: none; }
+        body.landing #input-area { margin-top: 18vh; justify-content: center; }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         /* Kenar Çubuğu (Sidebar) */
         #sidebar { 
-            width: 260px; height: 100%; 
+            width: 280px; 
+            height: 100%; 
             background: var(--bg-sidebar); 
-            backdrop-filter: blur(15px); 
+            backdrop-filter: blur(30px);
             border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; flex-shrink: 0; 
-            transition: transform 0.3s ease-out; 
+            display: flex; 
+            flex-direction: column; 
+            flex-shrink: 0; 
+            transition: width 0.3s ease, transform 0.3s ease, padding 0.3s ease, margin 0.3s ease; 
             z-index: 1001; 
+            position: relative;
         }
-        #sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+
+        /* Sidebar collapse */
+        body.sidebar-collapsed #sidebar { 
+            transform: none;
+            width: 0;
+            flex-basis: 0;
+            border-right: none;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        body.sidebar-collapsed #chat-widget { 
+            margin-left: 0;
+            flex: 1 1 100%;
+            min-width: 0;
+            width: 100%;
+        }
+        
+        #sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                /* Gemini Dark Mode Subtle Gradient */
+                linear-gradient(180deg, 
+                    rgba(66, 133, 244, 0.02) 0%, 
+                    rgba(234, 67, 53, 0.02) 25%, 
+                    rgba(251, 188, 4, 0.02) 50%, 
+                    rgba(52, 168, 83, 0.02) 75%, 
+                    rgba(156, 39, 176, 0.02) 100%),
+                /* Subtle Dark Mode Lines */
+                repeating-linear-gradient(90deg, 
+                    transparent, 
+                    transparent 20px, 
+                    rgba(255, 255, 255, 0.01) 20px, 
+                    rgba(255, 255, 255, 0.01) 21px);
+            pointer-events: none;
+        }
+        
+        #sidebar-header { 
+            padding: var(--space-md); 
+            border-bottom: 1px solid var(--border); 
+            flex-shrink: 0; 
+            position: relative;
+            z-index: 1;
+        }
+        
         #sidebar-header #new-chat-btn-sidebar { 
-            background: rgba(255, 255, 255, 0.1); border: none; color: var(--text-primary); 
-            font-size: 14px; font-weight: 500; padding: 10px 14px; 
-            border-radius: var(--radius-sm); 
-            cursor: pointer; transition: var(--transition); text-align: left; 
+            background: var(--primary);
+            border: 1px solid transparent; 
+            color: var(--primary-text); 
+            font-size: 14px; 
+            font-weight: 500; 
+            padding: var(--space-md) var(--space-lg); 
+            border-radius: var(--radius-md); 
+            cursor: pointer; 
+            transition: var(--transition-fast); 
+            text-align: left; 
+            width: 100%;
+            box-shadow: 0 6px 16px rgba(48, 213, 200, 0.25);
+            position: relative;
+            overflow: hidden;
         }
-         #sidebar-header #new-chat-btn-sidebar:hover { background: rgba(255, 255, 255, 0.15); }
-         #sidebar-header #new-chat-btn-sidebar .fas { margin-right: 10px; }
-        #chat-list { flex-grow: 1; overflow-y: auto; list-style: none; padding: 10px 0; }
+        
+        #sidebar-header #new-chat-btn-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        #sidebar-header #new-chat-btn-sidebar:hover::before {
+            left: 100%;
+        }
+        
+        #sidebar-header #new-chat-btn-sidebar:hover { 
+            background: var(--primary-hover);
+            border-color: transparent;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(34, 185, 173, 0.35);
+        }
+        
+        #sidebar-header #new-chat-btn-sidebar .fas { 
+            margin-right: var(--space-sm); 
+            font-size: 16px;
+        }
+        #chat-list { 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            list-style: none; 
+            padding: var(--space-sm) 0; 
+            margin: 0 var(--space-sm);
+        }
+        
          #chat-list li { 
-             position: relative; padding: 10px 14px; padding-right: 35px; margin: 4px 10px; 
+            position: relative; 
+            padding: var(--space-sm) var(--space-md); 
+            padding-right: var(--space-xl); 
+            margin: var(--space-xs) 0; 
              border-radius: var(--radius-sm); 
-             cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-             font-size: 15px; color: var(--text-secondary); 
-             transition: background-color 0.2s ease, color 0.2s ease; 
-         }
-         #chat-list li:hover { background-color: var(--bg-sidebar-hover); color: var(--text-primary); }
-         #chat-list li.active { background-color: var(--primary); color: var(--primary-text); font-weight: 500; }
+            cursor: pointer; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            font-size: 13px; 
+            color: var(--text-secondary); 
+            transition: var(--transition-fast); 
+            background: transparent;
+            border: 1px solid transparent;
+        }
+        
+        #chat-list li:hover { 
+            background: var(--bg-sidebar-hover); 
+            color: var(--text-primary); 
+            border-color: var(--border);
+            transform: translateX(4px);
+        }
+        
+        #chat-list li.active { 
+            background: var(--bg-tertiary);
+            color: var(--text-primary); 
+            font-weight: 500; 
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        #chat-list li.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            bottom: 6px;
+            width: 3px;
+            border-radius: 2px;
+            background: var(--primary);
+        }
+        
+        
          .delete-chat-btn {
-             position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.2s ease; padding: 5px; z-index: 5; 
-         }
-         #chat-list li:hover .delete-chat-btn { opacity: 1; }
-         .delete-chat-btn:hover { color: var(--error-red); }
-         #chat-list::-webkit-scrollbar { width: 6px; }
-         #chat-list::-webkit-scrollbar-track { background: transparent; }
-         #chat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-         #chat-list::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-        #sidebar-footer { padding: 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
-        #delete-all-btn { width: 100%; background: transparent; border: 1px solid var(--error-red); color: var(--error-red); font-size: 14px; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); opacity: 0.7; }
-        #delete-all-btn:hover { background: var(--error-red); color: var(--text-primary); opacity: 1; }
-        #delete-all-btn .fas { margin-right: 8px; }
+            position: absolute; 
+            right: var(--space-sm); 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(239, 68, 68, 0.1); 
+            border: 1px solid rgba(239, 68, 68, 0.2); 
+            color: var(--error-red); 
+            font-size: 12px; 
+            cursor: pointer; 
+            opacity: 0; 
+            transition: var(--transition-fast); 
+            padding: var(--space-xs); 
+            border-radius: var(--radius-xs);
+            z-index: 5; 
+        }
+        
+        #chat-list li:hover .delete-chat-btn { 
+            opacity: 1; 
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .delete-chat-btn:hover { 
+            background: var(--error-red); 
+            color: white;
+            transform: translateY(-50%) scale(1.2);
+        }
+        
+        #chat-list::-webkit-scrollbar { 
+            width: 6px; 
+        }
+        
+        #chat-list::-webkit-scrollbar-track { 
+            background: transparent; 
+        }
+        
+        #chat-list::-webkit-scrollbar-thumb { 
+            background: var(--border); 
+            border-radius: var(--radius-xs); 
+        }
+        
+        #chat-list::-webkit-scrollbar-thumb:hover { 
+            background: var(--text-secondary); 
+        }
+        #sidebar-footer { 
+            padding: var(--space-md); 
+            border-top: 1px solid var(--border); 
+            flex-shrink: 0; 
+        }
+        
+        #delete-all-btn { 
+            width: 100%; 
+            background: rgba(239, 68, 68, 0.1); 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+            color: var(--error-red); 
+            font-size: 14px; 
+            font-weight: 500;
+            padding: var(--space-md) var(--space-lg); 
+            border-radius: var(--radius-md); 
+            cursor: pointer; 
+            transition: var(--transition-fast); 
+            opacity: 0.8;
+        }
+        
+        #delete-all-btn:hover { 
+            background: var(--error-red); 
+            color: white; 
+            opacity: 1;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        #delete-all-btn .fas { 
+            margin-right: var(--space-sm); 
+        }
 
         /* Sohbet Widget'ı */
-        #chat-widget { flex: 1; min-width: 450px; height: 100%; display: flex; flex-direction: column; overflow: hidden; transition: flex 0.3s ease; }
+        #chat-widget { 
+            flex: 1; 
+            min-width: 450px; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            transition: var(--transition-normal); 
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+        }
         
         /* Sağ Taraf: Kod Çıktı Alanı */
         #output-container { flex: 0; width: 0; min-width: 0; height: 100%; display: flex; flex-direction: column; background: var(--bg-output); overflow: hidden; transition: flex 0.3s ease, width 0.3s ease, min-width 0.3s ease; border-left: 1px solid var(--border); }
@@ -118,42 +466,210 @@
         
         /* Başlık Alanı (Chat) */
         #chat-header { 
-            padding: 16px 24px; background: transparent; color: var(--text-primary); 
-            display: flex; align-items: center; justify-content: center; 
+            padding: var(--space-md) var(--space-lg); 
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            color: var(--text-primary); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
             border-bottom: 1px solid var(--border); 
-            box-shadow: none; flex-shrink: 0; height: 70px;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+            flex-shrink: 0; 
+            height: 60px;
             position: relative; 
+            z-index: 10;
         }
         
         #menu-toggle-btn {
-            display: none; background: none; border: none; color: var(--text-secondary);
-            font-size: 20px; cursor: pointer; padding: 10px;
+            display: inline-flex; 
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 18px; 
+            cursor: pointer; 
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            transition: var(--transition-fast);
+            position: absolute;
+            left: var(--space-lg);
+            top: 50%;
+            transform: translateY(-50%);
         }
-        #menu-toggle-btn:hover { color: var(--text-primary); }
         
-        .header-text { flex: 0 1 auto; text-align: center; } 
-        .header-title { font-size: 22px; font-weight: 500; color: var(--text-primary); }
+        #menu-toggle-btn:hover { 
+            color: var(--text-primary); 
+            background: var(--bg-sidebar-hover);
+            transform: translateY(-50%) scale(1.05);
+        }
+        
+        .header-text { 
+            flex: 0 1 auto; 
+            text-align: center; 
+        } 
+        
+        .header-title { 
+            font-size: 20px; 
+            font-weight: 500; 
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+        }
 
         /* Sohbet Alanı (Chat) */
         #chat-container { 
-            flex-grow: 1; overflow-y: auto; padding: 24px; 
-            display: flex; flex-direction: column; gap: 18px; 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding: var(--space-lg) var(--space-lg) var(--space-xl); 
+            display: flex; 
+            flex-direction: column; 
+            gap: var(--space-sm); 
             background: transparent; 
+            height: 100%;
         }
         
         #initial-message { 
-            padding: 20px; border: none; box-shadow: none; background: transparent; 
-            align-self: center; text-align: center; 
-            color: var(--text-secondary); font-size: 18px; 
-            font-weight: 300; margin-top: 40px; opacity: 0.9; 
+            padding: var(--space-lg); 
+            border: none; 
+            box-shadow: none; 
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-md);
+            align-self: center; 
+            text-align: center; 
+            color: var(--text-secondary); 
+            font-size: 15px; 
+            font-weight: 400; 
+            margin-top: var(--space-lg); 
+            opacity: 0.9; 
+            border: 1px solid var(--border);
+            animation: none;
         }
-        #initial-message .message-content p { margin-bottom: 0; } 
+        
+        @keyframes fadeInUp { from { opacity: 0; } to { opacity: 1; } }
+        
+        #initial-message .message-content p { 
+            margin-bottom: 0; 
+        } 
+
+        /* Typing Cursor Animation */
+        .typing-cursor {
+            animation: blink 1s infinite;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        /* AI Düşünüyor Mesajı */
+        .thinking-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .thinking-indicator .thinking-icon {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .thinking-dots {
+            display: inline-flex;
+            gap: 3px;
+        }
+        
+        .thinking-dots span {
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: thinking-dot 1.4s infinite;
+        }
+        
+        .thinking-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .thinking-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes thinking-dot {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 rgba(0, 206, 209, 0);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 10px rgba(0, 206, 209, 0.3);
+            }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .streaming-text {
+            color: var(--text-primary);
+        }
 
         /* Mesaj Baloncuk Stilleri */
-        .message { padding: 14px 20px; border-radius: var(--radius-message); max-width: 80%; line-height: 1.6; word-wrap: break-word; animation: messageAppear 0.4s ease-out; box-shadow: none; border: none; position: relative; }
-        @keyframes messageAppear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .user-message { background: var(--primary); color: var(--primary-text); align-self: flex-end; border-bottom-right-radius: var(--radius-sm); }
-        .model-message { background: var(--bg-tertiary); color: var(--text-primary); align-self: flex-start; border-bottom-left-radius: var(--radius-sm); }
+        .message { 
+            border-radius: var(--radius-md); 
+            max-width: 72%; 
+            line-height: 1.5; 
+            word-wrap: break-word; 
+            animation: none; 
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            position: relative; 
+            backdrop-filter: blur(8px);
+            font-size: 14px; 
+            padding: 10px 12px;
+            margin: 4px var(--space-md);
+        }
+        
+        @keyframes messageSlideIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .user-message { 
+            background: #161a20;
+            color: var(--text-primary); 
+            align-self: flex-end; 
+            border-bottom-right-radius: var(--radius-sm); 
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        
+        .model-message { 
+            background: #1e242c;
+            color: var(--text-primary); 
+            align-self: flex-start; 
+            border-bottom-left-radius: var(--radius-sm); 
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        
+        .model-message:hover { background: #232a34; }
         
         .message-image-preview {
             max-width: 100%;
@@ -202,13 +718,43 @@
         .run-code-btn .fa-play { font-size: 11px; } 
         .code-block pre { padding: 16px; overflow-x: auto; line-height: 1.6; background: var(--bg-code) !important; margin: 0; }
         .code-block pre, .code-block pre[class*="language-"] code, .code-block code[class*="language-"] { font-family: 'Roboto Mono', monospace !important; font-size: 14px !important; color: #f8f8f2; white-space: pre; text-shadow: none !important; }
+        
+        /* MARKDOWN STİLLERİ */
+        .markdown-h1 { font-size: 1.4em; font-weight: 600; color: var(--primary-color); margin: 1em 0 0.5em 0; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.3em; }
+        .markdown-h2 { font-size: 1.25em; font-weight: 600; color: var(--primary-color); margin: 0.8em 0 0.4em 0; }
+        .markdown-h3 { font-size: 1.1em; font-weight: 600; color: var(--text-primary); margin: 0.6em 0 0.3em 0; }
+        .markdown-bold { font-weight: 600; color: var(--text-primary); }
+        .markdown-italic { font-style: italic; color: var(--text-secondary); }
+        .markdown-underline { text-decoration: underline; color: var(--primary-color); }
+        .markdown-strikethrough { text-decoration: line-through; color: var(--text-secondary); opacity: 0.7; }
+        .markdown-inline-code { background: var(--bg-code); color: #f8f8f2; padding: 2px 6px; border-radius: 4px; font-family: 'Roboto Mono', monospace; font-size: 0.9em; border: 1px solid var(--border); }
+        .markdown-link { color: var(--primary-color); text-decoration: none; border-bottom: 1px solid transparent; transition: var(--transition); }
+        .markdown-link:hover { border-bottom-color: var(--primary-color); text-decoration: none; }
+        .markdown-list { margin: 0.5em 0; padding-left: 1.5em; }
+        .markdown-list-item { margin: 0.3em 0; color: var(--text-primary); }
+        .markdown-list-item::marker { color: var(--primary-color); }
        
         /* Input Alanı (Chat) */
         #input-area { 
-            padding: 15px 20px; background: transparent; border-top: 1px solid var(--border); 
-            display: flex; gap: 12px; align-items: flex-end; flex-shrink: 0; 
-            flex-wrap: wrap; 
+            padding: var(--space-md) var(--space-lg); 
+            background: transparent;
+            backdrop-filter: none;
+            border: none; 
+            border-radius: 0;
+            margin: 0;
+            display: grid; 
+            grid-template-columns: auto minmax(320px, 70%) auto; /* sol: kontroller, orta: mesaj, sağ: gönder */
+            grid-auto-rows: auto;
+            column-gap: var(--space-sm); 
+            row-gap: var(--space-xs);
+            align-items: center; 
+            justify-content: center; 
+            flex-shrink: 0; 
+            position: relative;
+            z-index: 10;
         }
+        
+        #input-area::before { display: none; }
         
         /* Resim Yükleme Önizleme Alanı */
         #file-preview-container {
@@ -223,101 +769,450 @@
         #remove-file-btn { background: none; border: none; color: var(--text-secondary); font-size: 16px; margin-left: auto; cursor: pointer; }
         #remove-file-btn:hover { color: var(--error-red); }
 
-        /* Ataç Butonu */
-        #upload-button {
-            background: transparent; border: none; color: var(--text-secondary); font-size: 20px; padding: 10px; margin-bottom: 5px; cursor: pointer;
+        /* Input Kontrol Butonları */
+        .input-controls { 
+            display: flex; 
+            flex-direction: column; 
+            gap: var(--space-xs);
+            align-items: center;
+            justify-content: center;
+            grid-column: 1;
         }
-        #upload-button:hover { color: var(--text-primary); }
-        #file-input { display: none; }
         
-        /* Dünya (Efe Modu) Butonu */
-        #conversation-mode-btn {
-            background: transparent; border: none; color: var(--text-secondary); font-size: 20px; padding: 10px; margin-bottom: 5px; cursor: pointer;
+        #upload-button, #conversation-mode-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary); 
+            font-size: 16px; 
+            padding: var(--space-sm); 
+            margin-bottom: var(--space-xs); 
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-fast);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        #conversation-mode-btn:hover { color: var(--text-primary); }
-        #conversation-mode-btn.active { color: var(--primary); } 
+        
+        #upload-button:hover, #conversation-mode-btn:hover { 
+            color: var(--text-primary); 
+            background: var(--bg-sidebar-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-1px);
+        }
+        
+        #conversation-mode-btn.active { 
+            color: var(--primary); 
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        } 
+
+        .icon-label { display: none; }
+        
         #conversation-mode-btn.listening { 
             color: var(--error-red); 
-            animation: pulse-globe 1.5s infinite;
+            background: var(--bg-tertiary);
+            border-color: var(--error-red);
+            animation: pulseGlobe 1.5s infinite;
         }
-        @keyframes pulse-globe { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-
-        .input-controls { display: flex; flex-basis: auto; }
-        .input-wrapper { flex-grow: 1; position: relative; }
+        
+        @keyframes pulseGlobe { 
+            0% { 
+                opacity: 1; 
+                transform: scale(1);
+            } 
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.05);
+            } 
+            100% { 
+                opacity: 1; 
+                transform: scale(1);
+            } 
+        }
+        
+        #file-input { 
+            display: none; 
+        }
+        
+        .input-wrapper { 
+            position: relative; 
+            width: 100%;
+            grid-column: 2;
+        }
         
         #prompt-input { 
-            width: 100%; border: 1px solid var(--border); border-radius: var(--radius-full); 
-            padding: 18px 24px; font-size: 16px; background: var(--bg-tertiary); 
-            color: var(--text-primary); resize: none; min-height: 58px; max-height: 120px; 
-            transition: var(--transition); line-height: 1.5; outline: none; 
+            width: 100%; 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius-md); 
+            padding: var(--space-md) 48px var(--space-md) var(--space-lg); 
+            font-size: 15px; 
+            background: var(--bg-primary);
+            backdrop-filter: blur(8px);
+            color: var(--text-primary); 
+            resize: none; 
+            min-height: 120px; /* 2 adet 48px kare butona yer + padding */
+            max-height: 120px; 
+            transition: var(--transition-fast); 
+            line-height: 1.5; 
+            outline: none;
+            box-shadow: var(--shadow-sm);
+            vertical-align: top; /* textarea üstten başlasın */
         }
-        #prompt-input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 169, 157, 0.5); }
-        #prompt-input::placeholder { color: var(--text-secondary); }
+
+        /* Inline mikrofon: input içinde, kutusuz, sağda */
+        .voice-btn.inline-mic { 
+            position: absolute; 
+            right: 8px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 36px; 
+            height: 36px; 
+            background: transparent; 
+            border: none; 
+            box-shadow: none; 
+            margin: 0; 
+            color: var(--text-secondary);
+            transition: color 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .voice-btn.inline-mic:hover { 
+            background: transparent; 
+            color: var(--primary);
+            transform: translateY(-50%) scale(1.0);
+        }
+        .voice-btn.inline-mic i { font-size: 16px; line-height: 1; display: inline-block; }
+        .voice-btn.inline-mic.active { 
+            transform: translateY(-50%); 
+            background: transparent; 
+            border: none; 
+            box-shadow: none; 
+            color: var(--primary);
+            animation: none; /* Prevent global .voice-btn.active pulse from altering transform */
+        }
+        .voice-btn.inline-mic.active i { font-size: 16px; }
+        
+        #prompt-input:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 3px rgba(48, 213, 200, 0.25);
+            background: var(--bg-primary);
+        }
+        
+        #prompt-input::placeholder { 
+            color: var(--text-muted); 
+            text-align: left; /* sol hizalı */
+        }
         
         #send-button { 
-            border: none; background: var(--primary); color: var(--primary-text); border-radius: 50%; 
-            width: 50px; height: 50px; font-size: 18px; cursor: pointer; 
-            transition: var(--transition); display: flex; align-items: center; justify-content: center; 
-            box-shadow: none; flex-shrink: 0; margin-bottom: 4px; 
+            border: none; 
+            background: var(--primary);
+            color: var(--primary-text); 
+            border-radius: var(--radius-md); 
+            width: 48px; 
+            height: 48px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            transition: var(--transition-fast); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 6px 16px rgba(48, 213, 200, 0.25); 
+            flex-shrink: 0; 
+            margin-bottom: var(--space-xs);
+            position: relative;
+            overflow: hidden;
+            grid-column: 3; /* sağ tarafta */
+            align-self: center; /* ortada */
         }
-        #send-button:hover:not([disabled]) { filter: brightness(1.2); }
-        #send-button:disabled { background: var(--bg-tertiary); color: var(--text-secondary); cursor: not-allowed; }
+        
+        #send-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        #send-button:hover::before {
+            left: 100%;
+        }
+        
+        #send-button:hover:not([disabled]) { 
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+            filter: brightness(1.05);
+        }
+        
+        #send-button:disabled { 
+            background: var(--bg-tertiary); 
+            color: var(--text-muted); 
+            cursor: not-allowed; 
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Sesli Konuşma Butonları */
+        .voice-btn {
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            width: 48px;
+            height: 48px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: var(--space-sm);
+            margin-bottom: var(--space-xs);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-btn:hover {
+            background: var(--primary);
+            color: var(--primary-text);
+            transform: translateY(-1px) scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .voice-btn.active {
+            background: var(--gemini-red);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        .voice-btn.speaking {
+            background: var(--gemini-green);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .voice-btn:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
 
         /* Yükleme & Hata Mesajları (Chat) */
-        #loading { padding: 16px 24px; color: var(--text-secondary); display: none; align-items: center; justify-content: flex-start; gap: 12px; font-size: 14px; background: var(--bg-secondary); border-top: 1px solid var(--border); }
-        .typing-dots { display: flex; gap: 4px; }
-        .typing-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); animation: typing 1.4s infinite ease-in-out; }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; } .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing { 0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+        #loading { 
+            padding: var(--space-lg) var(--space-xl); 
+            color: var(--text-secondary); 
+            display: none; 
+            align-items: center; 
+            justify-content: flex-start; 
+            gap: var(--space-md); 
+            font-size: 14px; 
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border); 
+        }
+        
+        .typing-dots { 
+            display: flex; 
+            gap: var(--space-xs); 
+        }
+        
+        .typing-dot { 
+            width: 8px; 
+            height: 8px; 
+            border-radius: 50%; 
+            background: var(--primary); 
+            animation: typing 1.4s infinite ease-in-out; 
+        }
+        
+        .typing-dot:nth-child(1) { 
+            animation-delay: -0.32s; 
+        } 
+        
+        .typing-dot:nth-child(2) { 
+            animation-delay: -0.16s; 
+        }
+        
+        @keyframes typing { 
+            0%, 80%, 100% { 
+                transform: scale(0.8); 
+                opacity: 0.5; 
+            } 
+            40% { 
+                transform: scale(1); 
+                opacity: 1; 
+            } 
+        }
         
         /* Scrollbar Styling (Chat) */
-        #chat-container::-webkit-scrollbar { width: 8px; }
-        #chat-container::-webkit-scrollbar-track { background: var(--bg-secondary); }
-        #chat-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        #chat-container::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+        #chat-container {
+            scroll-behavior: smooth;
+        }
         
-        /* YENİ: Konuşma Modalı Stilleri */
+        #chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        #chat-container::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: var(--radius-xs);
+            transition: background 0.2s ease;
+        }
+        
+        #chat-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+        
+        /* Konuşma Modalı Stilleri */
         #conversation-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: rgba(29, 29, 31, 0.9); /* YENİ: Hafif saydam Apple koyu */
-            backdrop-filter: blur(20px); /* YENİ: Güçlü blur */
-            display: none; justify-content: center; align-items: center; flex-direction: column; 
-            z-index: 1000;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(30px);
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column; 
+            z-index: 2000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: var(--transition-slow);
         }
+        
         #conversation-modal.visible { 
             display: flex;
             opacity: 1;
             visibility: visible;
         }
-        #close-conversation-modal { position: absolute; top: 30px; right: 40px; background: none; border: none; color: white; font-size: 40px; cursor: pointer; font-weight: 300; opacity: 0.7; }
-        #close-conversation-modal:hover { opacity: 1; }
+        
+        #close-conversation-modal { 
+            position: absolute; 
+            top: var(--space-xl); 
+            right: var(--space-2xl); 
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            color: var(--text-primary); 
+            font-size: 32px; 
+            cursor: pointer; 
+            font-weight: 300; 
+            opacity: 0.7; 
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+        
+        #close-conversation-modal:hover { 
+            opacity: 1; 
+            background: var(--bg-sidebar-hover);
+            transform: scale(1.1);
+        }
         
         #conversation-modal .sphere { 
-            width: 300px; height: 300px; 
+            width: 320px; 
+            height: 320px; 
             border-radius: 50%; 
-            background: linear-gradient(135deg, #00A99D, #8e44ad, #2980b9, #00A99D); 
+            background: linear-gradient(135deg, 
+                var(--gemini-blue) 0%, 
+                var(--gemini-red) 20%, 
+                var(--gemini-yellow) 40%, 
+                var(--gemini-green) 60%, 
+                var(--gemini-purple) 80%, 
+                var(--gemini-blue) 100%);
             background-size: 400% 400%; 
-            animation: gradient-rotate 10s ease infinite; 
-            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            animation: gradientRotate 8s ease infinite; 
+            transition: var(--transition-normal); 
+            box-shadow: 
+                var(--shadow-xl),
+                0 0 60px rgba(66, 133, 244, 0.3),
+                0 0 100px rgba(234, 67, 53, 0.2),
+                0 0 140px rgba(251, 188, 4, 0.1),
+                inset 0 0 60px rgba(255, 255, 255, 0.1);
+            position: relative;
         }
+        
+        #conversation-modal .sphere::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
         #conversation-modal .sphere.speaking-sphere { 
-            animation: gradient-rotate 10s ease infinite, pulse-sphere 1.2s ease-in-out infinite; 
-            box-shadow: 0 0 60px var(--primary); 
+            animation: gradientRotate 8s ease infinite, pulseSphere 1.2s ease-in-out infinite; 
+            box-shadow: 
+                var(--shadow-xl),
+                0 0 80px rgba(99, 102, 241, 0.6),
+                inset 0 0 60px rgba(255, 255, 255, 0.2);
         }
-        /* YENİ: Durum Metni */
+        
         #conversation-status {
-            font-size: 24px; /* YENİ: Büyüdü */
-            color: var(--text-primary); /* YENİ: Daha parlak */
-            margin-top: 40px; 
-            font-weight: 300; /* YENİ: Daha ince (Apple stili) */
-            transition: opacity 0.3s ease;
+            font-size: 28px; 
+            color: var(--text-primary); 
+            margin-top: var(--space-2xl); 
+            font-weight: 300; 
+            transition: var(--transition-normal);
+            text-align: center;
         }
-        @keyframes pulse-sphere { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes gradient-rotate { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        @keyframes pulseSphere { 
+            0% { 
+                transform: scale(1); 
+            } 
+            50% { 
+                transform: scale(1.05); 
+            } 
+            100% { 
+                transform: scale(1); 
+            } 
+        }
+        
+        @keyframes gradientRotate { 
+            0% { 
+                background-position: 0% 50%; 
+            } 
+            50% { 
+                background-position: 100% 50%; 
+            } 
+            100% { 
+                background-position: 0% 50%; 
+            } 
+        }
         
         /* Düzenleme Modalı Stilleri */
         #edit-modal-overlay {
@@ -340,35 +1235,166 @@
 
         /* RESPONSIVE (Mobil Menü) */
         @media (max-width: 900px) { 
-            body { padding: 0; } 
-            #main-container { flex-direction: column; height: 100vh; max-height: 100vh; border-radius: 0; border: none; padding: 0; } 
-            #sidebar { position: absolute; top: 0; left: 0; height: 100%; z-index: 1001; transform: translateX(-100%); transition: transform 0.3s ease-out; border-right: 1px solid var(--border); width: 280px; }
-            body.sidebar-visible #sidebar { transform: translateX(0); }
-            body.sidebar-visible #sidebar-overlay { opacity: 1; visibility: visible; }
-            #chat-widget { flex: 1; min-width: 100%; min-height: 50%; border-radius: 0; } 
-            #main-container.split-view-active #output-container { flex: 1; min-width: 100%; width: 100%; height: 50%; min-height: 200px; border-left: none; } 
-            #output-container { flex: 0; width: 100%; height: 0; min-height: 0; border-left: none; } 
-            #chat-header { position: relative; justify-content: space-between; border-radius: 0; padding-left: 15px; padding-right: 15px; } 
-            #menu-toggle-btn { display: block; position: static; transform: none; left: 0; }
-            .header-text { text-align: center; padding: 0; position: absolute; left: 50%; transform: translateX(-50%); } 
-            #chat-header div[style*="visibility: hidden"] { display: block; width: 50px; } 
-            #chat-container { padding: 15px; gap: 15px; }
-            .message { max-width: 90%; } 
+            body { 
+                padding: 0; 
+            } 
+            
+            #main-container { 
+                flex-direction: column; 
+                height: 100vh; 
+                max-height: 100vh; 
+                border-radius: 0; 
+                border: none; 
+                padding: 0; 
+                animation: none;
+            } 
+            
+            #sidebar { 
+                position: absolute; 
+                top: 0; 
+                left: 0; 
+                height: 100%; 
+                z-index: 1001; 
+                transform: translateX(-100%); 
+                transition: var(--transition-normal); 
+                border-right: 1px solid var(--border); 
+                width: 300px; 
+            }
+            
+            body.sidebar-visible #sidebar { 
+                transform: translateX(0); 
+            }
+            
+            body.sidebar-visible #sidebar-overlay { 
+                opacity: 1; 
+                visibility: visible; 
+            }
+            
+            #chat-widget { 
+                flex: 1; 
+                min-width: 100%; 
+                min-height: 50%; 
+                border-radius: 0; 
+            } 
+            
+            #main-container.split-view-active #output-container { 
+                flex: 1; 
+                min-width: 100%; 
+                width: 100%; 
+                height: 50%; 
+                min-height: 200px; 
+                border-left: none; 
+            } 
+            
+            #output-container { 
+                flex: 0; 
+                width: 100%; 
+                height: 0; 
+                min-height: 0; 
+                border-left: none; 
+            } 
+            
+            #chat-header { 
+                position: relative; 
+                justify-content: space-between; 
+                border-radius: 0; 
+                padding: var(--space-md) var(--space-lg); 
+                height: 70px;
+            } 
+            
+            #menu-toggle-btn { 
+                display: block; 
+                position: static; 
+                transform: none; 
+                left: 0; 
+            }
+            
+            .header-text { 
+                text-align: center; 
+                padding: 0; 
+                position: absolute; 
+                left: 50%; 
+                transform: translateX(-50%); 
+            } 
+            
+            #chat-header div[style*="visibility: hidden"] { 
+                display: block; 
+                width: 50px; 
+            } 
+            
+            #chat-container { 
+                padding: var(--space-lg); 
+                gap: var(--space-md); 
+            }
+            
+            .message { 
+                max-width: 90%; 
+            } 
             
             /* Mobilde input alanı */
-            #input-area { padding: 10px 10px; gap: 8px; flex-wrap: wrap; }
-            #file-preview-container { padding: 0 5px 5px 5px; }
-            .input-controls { order: 1; } /* Butonlar (Ataç, Efe) */
-            .input-wrapper { order: 3; flex-basis: 100%; } /* Metin kutusu alta */
-            #send-button { order: 2; } /* Gönder butonu */
+            #input-area { 
+                padding: var(--space-md); 
+                gap: var(--space-sm); 
+                flex-wrap: wrap; 
+            }
             
-            #prompt-input { padding: 16px 20px; min-height: 54px; }
-            #send-button { width: 48px; height: 48px; margin-bottom: 3px; }
-            #upload-button, #conversation-mode-btn { padding: 8px; margin-bottom: 3px; }
+            #file-preview-container { 
+                padding: 0 var(--space-xs) var(--space-xs) var(--space-xs); 
+            }
             
-            #edit-modal { width: 90%; }
-            #conversation-modal .sphere { width: 200px; height: 200px; }
-            #close-conversation-modal { top: 20px; right: 20px; }
+            .input-controls { 
+                order: 1; 
+            }
+            
+            .input-wrapper { 
+                order: 3; 
+                flex-basis: 100%; 
+            }
+            
+            #send-button { 
+                order: 2; 
+            }
+            
+            .voice-btn {
+                order: 1;
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+                margin-left: var(--space-xs);
+            }
+            
+            #prompt-input { 
+                padding: var(--space-md) var(--space-lg); 
+                min-height: 54px; 
+            }
+            
+            #send-button { 
+                width: 48px; 
+                height: 48px; 
+                margin-bottom: var(--space-xs); 
+            }
+            
+            #upload-button, #conversation-mode-btn { 
+                padding: var(--space-sm); 
+                margin-bottom: var(--space-xs); 
+            }
+            
+            #edit-modal { 
+                width: 90%; 
+            }
+            
+            #conversation-modal .sphere { 
+                width: 240px; 
+                height: 240px; 
+            }
+            
+            #close-conversation-modal { 
+                top: var(--space-lg); 
+                right: var(--space-lg); 
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -403,7 +1429,7 @@
                  <div style="width: 50px; visibility: hidden;"></div> 
             </div>
             <div id="chat-container"></div>
-            <div id="loading"> 
+            <div id="loading" style="display: none;"> 
                 <div class="typing-dots"> <div class="typing-dot"></div> <div class="typing-dot"></div> <div class="typing-dot"></div> </div>
                 <span>Bilio AI düşünüyor...</span>
             </div>
@@ -415,20 +1441,26 @@
                      <button id="remove-file-btn" title="Dosyayı Kaldır">&times;</button>
                  </div>
                  
-                 <div class="input-controls">
-                     <button id="upload-button" title="Resim Yükle">
-                         <i class="fas fa-paperclip"></i>
-                     </button>
-                     <button id="conversation-mode-btn" title="Efe Sesli Konuşma Modu">
-                         <i class="fas fa-globe"></i>
-                     </button>
-                 </div>
+                <div class="input-controls">
+                    <button id="upload-button" title="Dosya">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button id="conversation-mode-btn" title="Web">
+                        <i class="fas fa-globe"></i>
+                    </button>
+                </div>
                  
                  <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp" hidden> 
                  
-                 <div class="input-wrapper"> 
-                     <input type="text" id="prompt-input" placeholder="Bilio AI'ya soru sorun..."> 
-                 </div>
+                <div class="input-wrapper"> 
+                    <textarea id="prompt-input" placeholder="Bilio AI'ya soru sorun..."></textarea> 
+                    <button id="voice-input-btn" class="voice-btn inline-mic" title="Sesli Giriş">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                
+                
+                 
                  <button id="send-button"> <i class="fas fa-paper-plane"></i> </button>
             </div>
         </div>
@@ -444,7 +1476,7 @@
     
     <div id="conversation-modal">
         <button id="close-conversation-modal">&times;</button>
-        <div class="sphere"></div>
+        <div class="sphere" aria-hidden="true"></div>
         <h3 id="conversation-status"></h3> </div>
     
     <div id="edit-modal-overlay">
@@ -473,7 +1505,7 @@
         
         /* ======================================================================== */
         /* == API UÇ NOKTASI (Localhost) == */
-        const API_URL = "https://bilio-ai-backend.onrender.com/api/chat";
+        const API_URL = "http://localhost:3001/api/chat";
         /* ======================================================================== */
 
         // HTML elementlerini seç
@@ -488,6 +1520,10 @@
         const newChatBtnSidebar = document.getElementById("new-chat-btn-sidebar"); 
         const chatListUl = document.getElementById("chat-list"); 
         const deleteAllBtn = document.getElementById("delete-all-btn"); 
+        
+        // Sesli Konuşma Elementleri
+        const voiceInputBtn = document.getElementById("voice-input-btn");
+        const voiceOutputBtn = document.getElementById("voice-output-btn"); 
         
         // Efe Modu Elementleri
         const conversationModeBtn = document.getElementById("conversation-mode-btn"); 
@@ -524,6 +1560,7 @@
         // Sesli Konuşma API'leri
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition;
+        let isListening = false;
         let availableVoices = [];
 
         function loadVoices() {
@@ -531,6 +1568,23 @@
         }
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices(); 
+// === Akıllı Landing State Kontrolü ===
+// Sadece localStorage'da HİÇ sohbet yoksa 'landing' sınıfını ekle
+try {
+    const savedList = localStorage.getItem('bilioChatsList_v2');
+    const chatExists = savedList ? JSON.parse(savedList).length > 0 : false;
+
+    if (!chatExists) {
+        document.body.classList.add('landing');
+        console.log("Bilio AI: Yeni kullanıcı, landing state etkin.");
+    } else {
+        console.log("Bilio AI: Geri dönen kullanıcı, landing state devre dışı.");
+    }
+} catch(e) {
+    console.error("Landing state kontrol hatası:", e);
+    document.body.classList.add('landing'); // Hata durumunda varsayılanı kullan
+}
+// ======================================
 
         if (SpeechRecognition) {
             recognition = new SpeechRecognition();
@@ -538,11 +1592,13 @@
             recognition.lang = 'tr-TR'; 
             recognition.interimResults = false; 
             recognition.maxAlternatives = 1;
+            isListening = false;
 
             recognition.onstart = () => {
                 console.log("Ses tanıma başladı...");
                 if (conversationStatus) conversationStatus.textContent = "Sizi Dinliyorum...";
                 conversationModeBtn.classList.add("listening");
+                isListening = true;
             };
             
             recognition.onresult = (event) => {
@@ -555,6 +1611,7 @@
             recognition.onend = () => {
                 console.log("Ses tanıma durdu.");
                 conversationModeBtn.classList.remove("listening");
+                isListening = false;
                 // YENİ: Otomatik dinleme döngüsü
                 // Sadece konuşma modundaysak ve AI şu anda konuşmuyorsa tekrar başlat
                 if (isConversationMode && !window.speechSynthesis.speaking) {
@@ -568,6 +1625,7 @@
             recognition.onerror = (event) => {
                 console.error("Ses tanıma hatası:", event.error);
                 conversationModeBtn.classList.remove("listening");
+                isListening = false;
             };
         } else {
             console.warn("SpeechRecognition (ses tanıma) bu tarayıcıda desteklenmiyor.");
@@ -576,14 +1634,24 @@
 
         // === SOHBET YÖNETİMİ FONKSİYONLARI (localStorage) ===
         // (Değişiklik yok, v17 ile aynı)
-        function saveChatList() { try { localStorage.setItem('bilioChatsList_v2', JSON.stringify(chatList)); } catch (e) { console.error("Sohbet listesi kaydedilemedi:", e); } }
+        function saveChatList() { 
+            try { 
+                localStorage.setItem('bilioChatsList_v2', JSON.stringify(chatList)); 
+            } catch (e) { 
+                console.error("Sohbet listesi kaydedilemedi:", e);
+                // LocalStorage temizle
+                localStorage.clear();
+            } 
+        }
         function saveCurrentChatHistory(summaryPrompt = null) {
              chatHistory.forEach((msg, index) => {
                  if (!msg.id) { msg.id = Date.now() + index; }
              });
              if (currentChatId && chatHistory.length > 0 && chatHistory.some(m => m.role === 'user')) { 
                  try {
-                    localStorage.setItem(`bilioChat_${currentChatId}`, JSON.stringify(chatHistory));
+                    // Chat history'yi sıkıştır (son 50 mesaj)
+                    const compressedHistory = chatHistory.slice(-50);
+                    localStorage.setItem(`bilioChat_${currentChatId}`, JSON.stringify(compressedHistory));
                     let summary = summaryPrompt ? (summaryPrompt.substring(0, 25) + (summaryPrompt.length > 25 ? '...' : '')) : null;
                      const chatIndex = chatList.findIndex(chat => chat.id == currentChatId); 
                      if (chatIndex > -1) {
@@ -595,7 +1663,10 @@
                             chatList.unshift({ id: currentChatId, summary: summary }); saveChatList(); renderSidebar(); 
                          }
                      }
-                 } catch (e) { console.error(`Sohbet ${currentChatId} kaydedilemedi:`, e); }
+                 } catch (e) { 
+                     console.warn(`Sohbet ${currentChatId} kaydedilemedi (sessizce devam ediliyor):`, e.message);
+                     // LocalStorage hatası streaming'i engellemesin
+                 }
              } else {
                  removeEmptyChatFromList(currentChatId);
              }
@@ -692,18 +1763,18 @@
         }
         function renderChat(history) {
              chatContainer.innerHTML = ''; 
-             if (!history || history.length === 0) { displayInitialMessage(); } 
-             else { 
+             // Otomatik karşılama mesajını kaldırdık
+             if (history && history.length > 0) { 
                  history.forEach(msg => { 
-                     if (!msg.id) msg.id = Date.now() + Math.random();
-                     const imagePart = msg.parts.find(part => part.inlineData);
-                     displayMessage(msg.parts[0].text, msg.role, msg.id, imagePart); 
+                     const imgPart = msg.imagePart || null; 
+                     displayMessage(msg.text, msg.sender, msg.id, imgPart); 
                  }); 
-             }
+             } 
         }
         function displayInitialMessage() { 
-            const el = displayMessage(initialMessageText, "model", "initial-msg");
-             if(el) el.id = 'initial-message'; 
+            // Devre dışı: otomatik ilk mesaj gösterilmeyecek
+            // const el = displayMessage(initialMessageText, "model", "initial-msg");
+            // if(el) el.id = 'initial-message'; 
         }
         
         // sendMessage (Resim + Efe Modu Destekli)
@@ -717,8 +1788,34 @@
                 }
                 return; 
             }
+            
+            // Hızlı yanıt kontrolü (Efe Modu'nda)
+            if (isConversationMode && prompt) {
+                const cachedResponse = getCachedResponse(prompt);
+                if (cachedResponse) {
+                    // Kullanıcı mesajını göster
+                    const userMessageData = { id: Date.now(), role: "user", parts: [{ text: prompt }] };
+                    displayMessage(prompt, "user", userMessageData.id, null, false);
+                    chatHistory.push(userMessageData);
+                    
+                    // Hızlı yanıtı göster
+                    showQuickResponse(cachedResponse);
+                    
+                    // Input'u temizle
+                    promptInput.value = "";
+                    return;
+                }
+            }
 
-            if (isConversationMode) conversationStatus.textContent = "Düşünüyorum...";
+            if (isConversationMode) {
+                // conversationStatus.textContent = "Düşünüyorum...";
+                // Daha uzun düşünme süresi göster (geçici olarak kapalı)
+                // setTimeout(() => {
+                //     if (conversationStatus.textContent === "Düşünüyorum...") {
+                //         conversationStatus.textContent = "Hala düşünüyorum...";
+                //     }
+                // }, 2000);
+            }
 
             const initialMsg = document.getElementById('initial-message');
             if (initialMsg) { initialMsg.remove(); }
@@ -743,15 +1840,20 @@
                 };
             }
             
-            displayMessage(prompt, "user", userMessageData.id, imagePayload); 
-            chatHistory.push(userMessageData); 
+            if (!isConversationMode) {
+                displayMessage(prompt, "user", userMessageData.id, imagePayload); 
+                chatHistory.push(userMessageData); 
+            }
             
-            if (isFirstMessageOfThisChat) { saveCurrentChatHistory(prompt || "Resim"); }
+            if (isFirstMessageOfThisChat) { 
+                try { document.body.classList.remove('landing'); } catch(e) {}
+                if (!isConversationMode) { saveCurrentChatHistory(prompt || "Resim"); }
+            }
             
             clearFilePreview();
             promptInput.value = ""; 
             sendButton.disabled = true; 
-            loadingIndicator.style.display = "flex";
+            // loadingIndicator.style.display = "flex"; // Geçici olarak kapalı
             
             let modelMessageElement;
             let errorOccurred = false; 
@@ -766,6 +1868,20 @@
                     }
                 });
                 
+                // Gerçek streaming kullan
+                // loadingIndicator.style.display = "none"; // Geçici olarak kapalı
+                
+                try {
+                    const result = await sendNormalResponse(cleanedHistory, MODEL_NAME, imagePayload, isConversationMode);
+                    modelMessageElement = result.modelMessageElement;
+                    if (isConversationMode) {
+                        const speakTextContent = result.fullResponse || '';
+                        if (speakTextContent.trim()) { speakMessage(speakTextContent, null, true); }
+                    }
+                } catch (streamingError) {
+                    console.error("Streaming hatası, fallback'e geçiliyor:", streamingError);
+                    
+                    // Fallback: Normal API kullan
                 const response = await fetch(API_URL, { 
                     method: "POST", 
                     headers: { "Content-Type": "application/json", }, 
@@ -773,11 +1889,10 @@
                         "contents": cleanedHistory, 
                         "model": MODEL_NAME,
                         "image": imagePayload, 
-                        "isConversationMode": isConversationMode 
+                        "isConversationMode": isConversationMode,
+                        "memoryContext": isConversationMode ? getMemoryContext() : null
                     }) 
                 });
-
-                 loadingIndicator.style.display = "none"; 
 
                 if (!response.ok) {
                     let errorData;
@@ -797,18 +1912,19 @@
                 if (data.candidates && data.candidates.length > 0) {
                     const modelResponse = data.candidates[0].content.parts[0].text;
                     const modelMessageData = { id: Date.now() + 1, role: "model", parts: [{ text: modelResponse }] }; 
-                    
-                    modelMessageElement = displayMessage(modelResponse, "model", modelMessageData.id);
-                    chatHistory.push(modelMessageData);
-                    saveCurrentChatHistory(null); 
-                    
+                    if (!isConversationMode) {
+                        modelMessageElement = displayMessage(modelResponse, "model", modelMessageData.id);
+                        chatHistory.push(modelMessageData);
+                        saveCurrentChatHistory(null); 
+                    }
                     if (isConversationMode) {
-                        speakMessage(modelMessageElement.querySelector('.message-content').innerHTML, null, true); // Erkek sesi
+                        if (modelResponse.trim()) { speakMessage(modelResponse, null, true); }
                     }
                 } else { 
                     let reason = data.promptFeedback?.blockReason || "Backend'den geçerli cevap alınamadı";
                     chatHistory.pop(); 
                     throw new Error(`[${reason}]`);
+                    }
                 }
             } catch (error) {
                 console.error("Frontend: Catch Bloğu Hata Detayı:", error); 
@@ -831,7 +1947,7 @@
         // Düzenlenmiş tarihi yeniden gönder
         async function resendHistory(editedHistory) {
              console.log("Düzenlenmiş tarih yeniden gönderiliyor...");
-             loadingIndicator.style.display = "flex";
+             // loadingIndicator.style.display = "flex"; // Geçici olarak kapalı
              sendButton.disabled = true;
              let modelMessageElement;
              let errorOccurred = false; 
@@ -847,10 +1963,11 @@
                     body: JSON.stringify({ 
                         "contents": cleanedHistory, 
                         "model": MODEL_NAME,
-                        "isConversationMode": isConversationMode 
+                        "isConversationMode": isConversationMode,
+                        "memoryContext": isConversationMode ? getMemoryContext() : null
                     }) 
                 });
-                 loadingIndicator.style.display = "none"; 
+                 // loadingIndicator.style.display = "none"; // Geçici olarak kapalı 
                 if (!response.ok) {
                     let errorData;
                     try { errorData = await response.json(); } 
@@ -887,15 +2004,114 @@
              }
         }
 
+        // Normal API çağrısı için fonksiyon
+        async function sendNormalResponse(cleanedHistory, modelName, imagePayload, isConversationMode) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    // Normal API endpoint'ini kullan
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        "contents": cleanedHistory,
+                        "model": modelName,
+                        "image": imagePayload,
+                        "isConversationMode": isConversationMode,
+                        "memoryContext": isConversationMode ? getMemoryContext() : null
+                    })
+                });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`API yanıt hatası: ${response.status} - ${errorText}`);
+                    }
+
+                    // Normal API yanıtını al
+                    const data = await response.json();
+                    const fullResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "Yanıt alınamadı.";
+
+                    // Mesaj elementini oluştur
+                    const modelMessageData = { id: Date.now() + 1, role: "model", parts: [{ text: fullResponse }] };
+                    const modelMessageElement = !isConversationMode 
+                        ? displayMessage(fullResponse, "model", modelMessageData.id, null, false)
+                        : null;
+
+                    // Chat history'ye ekle (Efe modunda ekleme)
+                    if (!isConversationMode) { chatHistory.push(modelMessageData); }
+                    
+                    // Efe Modu'nda hafızayı güncelle
+                    if (isConversationMode) {
+                        const userMessage = chatHistory[chatHistory.length - 2]?.parts[0]?.text || '';
+                        updateEfeMemory(userMessage, fullResponse);
+                        
+                        // Efe'nin kişiliğini güncelle
+                        const context = getMemoryContext();
+                        updateEfePersonality(context);
+                    }
+                    
+                    // Efe Modu'nda otomatik sesli çıkış
+                    if (isConversationMode && synthesis && fullResponse.trim()) {
+                        setTimeout(() => {
+                            speakText(fullResponse);
+                        }, 1000); // 1 saniye bekle
+                    }
+
+                    resolve({ modelMessageElement, fullResponse });
+
+                } catch (error) {
+                    console.error("Normal API çağrısı hatası:", error);
+                    reject(error);
+                }
+            });
+        }
+
+        // Streaming efekti için fonksiyon
+        function streamTextToElement(element, text, speed = 30) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const streamingTextElement = element.querySelector('.streaming-text');
+                    const cursorElement = element.querySelector('.typing-cursor');
+                    
+                    if (!streamingTextElement) {
+                        console.error("Streaming text element bulunamadı");
+                        reject(new Error("Streaming element not found"));
+                        return;
+                    }
+                    
+                    let index = 0;
+                    const interval = setInterval(() => {
+                        if (index < text.length) {
+                            streamingTextElement.textContent += text[index];
+                            index++;
+                        } else {
+                            clearInterval(interval);
+                            // Cursor'ı kaldır
+                            if (cursorElement) {
+                                cursorElement.remove();
+                            }
+                            // Final formatting uygula
+                            try {
+                                const formattedText = formatMarkdownAndCode(streamingTextElement.textContent, 'model');
+                                streamingTextElement.innerHTML = formattedText;
+                            } catch (formatError) {
+                                console.error("Formatting hatası:", formatError);
+                            }
+                            resolve();
+                        }
+                    }, speed);
+                } catch (error) {
+                    console.error("Streaming fonksiyon hatası:", error);
+                    reject(error);
+                }
+            });
+        }
 
         // displayMessage (Resim önizlemesi + Geri Bildirim eklendi)
-        function displayMessage(message, sender, messageId = null, imagePart = null) {
+        function displayMessage(message, sender, messageId = null, imagePart = null, isStreaming = false) {
             const messageElement = document.createElement("div");
             messageElement.classList.add("message", `${sender}-message`);
             if (sender === 'model' && message === initialMessageText) { messageElement.id = 'initial-message'; }
             if (messageId) { messageElement.dataset.messageId = messageId; }
-            
-            const formattedMessage = formatMarkdownAndCode(message, sender);
             
             let imageHTML = '';
             if (imagePart && imagePart.base64Data) { 
@@ -919,22 +2135,43 @@
                  </div>`;
             }
 
+            let formattedMessage = '';
+            if (isStreaming) {
+                // Streaming için "AI düşünüyor" mesajı ile başla (geçici olarak kapalı)
+                // const thinkingHTML = `<div class="thinking-indicator">
+                //     <div class="thinking-icon">
+                //         <i class="fas fa-brain"></i>
+                //         <span>Düşünüyorum...</span>
+                //         <div class="thinking-dots">
+                //             <span></span>
+                //             <span></span>
+                //             <span></span>
+                //         </div>
+                //     </div>
+                // </div>`;
+                messageElement.innerHTML = `${actionsHTML} <div class="message-content">${imageHTML}<span class="streaming-text"></span><span class="typing-cursor">|</span></div>`;
+            } else {
+                formattedMessage = formatMarkdownAndCode(message, sender);
             messageElement.innerHTML = `${actionsHTML} <div class="message-content">${imageHTML}${formattedMessage}</div>`;
+            }
             
             if (!chatContainer) { console.error("chatContainer bulunamadı!"); return null;} 
             chatContainer.appendChild(messageElement);
             if (formattedMessage && formattedMessage.includes('class="language-')) {
                  try { Prism.highlightAllUnder(messageElement); } catch (e) { console.error("Prism hatası:", e); }
             }
-            chatContainer.scrollTop = chatContainer.scrollHeight; 
+            // Optimized smooth scrolling
+            smoothScroll(chatContainer, chatContainer.scrollHeight); 
             return messageElement; 
         }
 
-        // Markdown ve Kod Formatlama Fonksiyonu
+        // Markdown ve Kod Formatlama Fonksiyonu (Gelişmiş)
         function formatMarkdownAndCode(text, sender) { 
              if (!text) return ''; 
             let safeMessage = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
             let formattedMessage = '';
+            
+            // Önce kod bloklarını ayır
             const parts = safeMessage.split(/(```[\s\S]*?```)/g);
             parts.forEach(part => {
                 if (part.startsWith('```')) {
@@ -946,8 +2183,39 @@
                         formattedMessage += `<div class="code-block" data-language="${lang}"><div class="code-header"><span class="code-lang">${lang}</span><div class="code-actions"> <button class="copy-btn"> <i class="fas fa-copy"></i> Kopyala </button> ${showRunButton ? `<button class="run-code-btn" data-language="${lang}"> <i class="fas fa-play"></i> Çalıştır </button>` : ''}</div></div><pre><code class="language-${lang}">${code}</code></pre></div>`;
                     } else { formattedMessage += part; }
                 } else {
-                    if (sender === 'model') { formattedMessage += part .replace(/^### (.*$)/gim, '<h3>$1</h3>') .replace(/^## (.*$)/gim, '<h2>$1</h2>') .replace(/^# (.*$)/gim, '<h1>$1</h1>') .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') .replace(/\*(.*?)\*/g, '<em>$1</em>') .replace(/\n/g, '<br>'); } 
-                    else { formattedMessage += part.replace(/\n/g, '<br>'); }
+                    if (sender === 'model') {
+                        // Gelişmiş markdown desteği
+                        let processedPart = part
+                            // Başlıklar
+                            .replace(/^### (.*$)/gim, '<h3 class="markdown-h3">$1</h3>')
+                            .replace(/^## (.*$)/gim, '<h2 class="markdown-h2">$1</h2>')
+                            .replace(/^# (.*$)/gim, '<h1 class="markdown-h1">$1</h1>')
+                            // Kalın ve italik
+                            .replace(/\*\*(.*?)\*\*/g, '<strong class="markdown-bold">$1</strong>')
+                            .replace(/\*(.*?)\*/g, '<em class="markdown-italic">$1</em>')
+                            // Altı çizili
+                            .replace(/__(.*?)__/g, '<u class="markdown-underline">$1</u>')
+                            // Üstü çizili
+                            .replace(/~~(.*?)~~/g, '<del class="markdown-strikethrough">$1</del>')
+                            // Inline kod
+                            .replace(/`([^`]+)`/g, '<code class="markdown-inline-code">$1</code>')
+                            // Linkler
+                            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="markdown-link" target="_blank">$1</a>')
+                            // Liste öğeleri
+                            .replace(/^\* (.+)$/gm, '<li class="markdown-list-item">$1</li>')
+                            .replace(/^- (.+)$/gm, '<li class="markdown-list-item">$1</li>')
+                            .replace(/^\d+\. (.+)$/gm, '<li class="markdown-list-item">$1</li>')
+                            // Satır sonları
+                            .replace(/\n/g, '<br>');
+                        
+                        // Liste öğelerini grupla
+                        processedPart = processedPart.replace(/(<li class="markdown-list-item">.*<\/li>)/g, '<ul class="markdown-list">$1</ul>');
+                        processedPart = processedPart.replace(/<\/ul><br><ul class="markdown-list">/g, '');
+                        
+                        formattedMessage += processedPart;
+                    } else { 
+                        formattedMessage += part.replace(/\n/g, '<br>'); 
+                    }
                 }
             });
              if (text === initialMessageText) { formattedMessage = `<p>${formattedMessage}</p>`; }
@@ -1089,7 +2357,7 @@
          async function sendFeedback(question, answer) {
              console.log("Geri bildirim gönderiliyor...");
              try {
-                 await fetch("http://localhost:3000/api/feedback", {
+                 await fetch("http://localhost:3001/api/feedback", {
                      method: 'POST',
                      headers: { 'Content-Type': 'application/json' },
                      body: JSON.stringify({ question: question, answer: answer })
@@ -1100,9 +2368,957 @@
              }
          }
 
+        // ======================================================
+        // GELİŞMİŞ HAFIZA SİSTEMİ (Efe Modu)
+        // ======================================================
+        
+        let efeMemory = {
+            shortTerm: [], // Son 10 mesaj
+            longTerm: [],  // Önemli bilgiler
+            userPreferences: {}, // Kullanıcı tercihleri
+            conversationContext: {}, // Konuşma bağlamı
+            lastInteraction: null, // Son etkileşim zamanı
+            userMood: 'neutral', // Kullanıcı ruh hali
+            topics: [], // Konuşulan konular
+            importantFacts: [] // Önemli gerçekler
+        };
+        
+        // Hafıza yönetimi fonksiyonları
+        function updateEfeMemory(userMessage, aiResponse) {
+            const timestamp = new Date().toISOString();
+            
+            // Kısa vadeli hafızaya ekle
+            efeMemory.shortTerm.push({
+                user: userMessage,
+                ai: aiResponse,
+                timestamp: timestamp
+            });
+            
+            // Son 10 mesajı tut
+            if (efeMemory.shortTerm.length > 10) {
+                efeMemory.shortTerm.shift();
+            }
+            
+            // Önemli bilgileri uzun vadeli hafızaya ekle
+            extractImportantInfo(userMessage, aiResponse, timestamp);
+            
+            // Kullanıcı tercihlerini güncelle
+            updateUserPreferences(userMessage);
+            
+            // Konuşma bağlamını güncelle
+            updateConversationContext(userMessage, aiResponse);
+            
+            // Son etkileşim zamanını güncelle
+            efeMemory.lastInteraction = timestamp;
+            
+            console.log('🧠 Efe hafızası güncellendi:', efeMemory);
+        }
+        
+        // Önemli bilgileri çıkar
+        function extractImportantInfo(userMessage, aiResponse, timestamp) {
+            const importantPatterns = [
+                /benim adım (\w+)/i,
+                /adım (\w+)/i,
+                /(\w+) olarak çalışıyorum/i,
+                /(\w+) yaşındayım/i,
+                /(\w+) şehrinde yaşıyorum/i,
+                /(\w+) üniversitesinde/i,
+                /(\w+) hastalığım var/i,
+                /(\w+) alerjim var/i,
+                /sevdiğim (\w+)/i,
+                /sevmediğim (\w+)/i
+            ];
+            
+            const text = userMessage + ' ' + aiResponse;
+            
+            importantPatterns.forEach(pattern => {
+                const match = text.match(pattern);
+                if (match) {
+                    efeMemory.importantFacts.push({
+                        fact: match[0],
+                        extracted: match[1],
+                        timestamp: timestamp,
+                        context: userMessage
+                    });
+                }
+            });
+            
+            // Son 50 önemli gerçeği tut
+            if (efeMemory.importantFacts.length > 50) {
+                efeMemory.importantFacts = efeMemory.importantFacts.slice(-50);
+            }
+        }
+        
+        // Kullanıcı tercihlerini güncelle
+        function updateUserPreferences(userMessage) {
+            const preferences = {
+                language: 'tr', // Türkçe tercih
+                responseLength: 'short', // Kısa cevaplar
+                formality: 'casual', // Samimi ton
+                topics: []
+            };
+            
+            // Konu tercihlerini tespit et
+            if (userMessage.includes('kod') || userMessage.includes('programlama')) {
+                preferences.topics.push('programming');
+            }
+            if (userMessage.includes('müzik') || userMessage.includes('şarkı')) {
+                preferences.topics.push('music');
+            }
+            if (userMessage.includes('spor') || userMessage.includes('futbol')) {
+                preferences.topics.push('sports');
+            }
+            
+            efeMemory.userPreferences = { ...efeMemory.userPreferences, ...preferences };
+        }
+        
+        // Konuşma bağlamını güncelle
+        function updateConversationContext(userMessage, aiResponse) {
+            const context = {
+                currentTopic: extractCurrentTopic(userMessage),
+                mood: detectUserMood(userMessage),
+                urgency: detectUrgency(userMessage),
+                questionType: detectQuestionType(userMessage)
+            };
+            
+            efeMemory.conversationContext = context;
+            efeMemory.userMood = context.mood;
+        }
+        
+        // Mevcut konuyu çıkar
+        function extractCurrentTopic(message) {
+            const topics = {
+                'programming': ['kod', 'programlama', 'yazılım', 'javascript', 'python', 'html', 'css'],
+                'music': ['müzik', 'şarkı', 'sanatçı', 'albüm', 'konser'],
+                'sports': ['spor', 'futbol', 'basketbol', 'tenis', 'maç'],
+                'food': ['yemek', 'restoran', 'tarif', 'mutfak'],
+                'travel': ['seyahat', 'tatil', 'ülke', 'şehir', 'otel'],
+                'work': ['iş', 'çalışma', 'ofis', 'proje', 'toplantı'],
+                'health': ['sağlık', 'hastalık', 'doktor', 'ilaç', 'tedavi']
+            };
+            
+            for (const [topic, keywords] of Object.entries(topics)) {
+                if (keywords.some(keyword => message.toLowerCase().includes(keyword))) {
+                    return topic;
+                }
+            }
+            
+            return 'general';
+        }
+        
+        // Kullanıcı ruh halini tespit et
+        function detectUserMood(message) {
+            const positiveWords = ['iyi', 'güzel', 'harika', 'mükemmel', 'teşekkür', 'çok güzel'];
+            const negativeWords = ['kötü', 'üzgün', 'sıkıntı', 'problem', 'yardım', 'acil'];
+            const excitedWords = ['wow', 'vay', 'süper', 'muhteşem', 'çok iyi'];
+            
+            const lowerMessage = message.toLowerCase();
+            
+            if (excitedWords.some(word => lowerMessage.includes(word))) {
+                return 'excited';
+            } else if (positiveWords.some(word => lowerMessage.includes(word))) {
+                return 'positive';
+            } else if (negativeWords.some(word => lowerMessage.includes(word))) {
+                return 'negative';
+            }
+            
+            return 'neutral';
+        }
+        
+        // Aciliyet seviyesini tespit et
+        function detectUrgency(message) {
+            const urgentWords = ['acil', 'hemen', 'şimdi', 'hızlı', 'çabuk', 'lütfen'];
+            const lowerMessage = message.toLowerCase();
+            
+            return urgentWords.some(word => lowerMessage.includes(word)) ? 'high' : 'low';
+        }
+        
+        // Soru tipini tespit et
+        function detectQuestionType(message) {
+            if (message.includes('?')) {
+                if (message.includes('nasıl') || message.includes('neden') || message.includes('ne zaman')) {
+                    return 'how_why_when';
+                } else if (message.includes('kim') || message.includes('ne')) {
+                    return 'who_what';
+                } else if (message.includes('nerede') || message.includes('hangi')) {
+                    return 'where_which';
+                }
+                return 'general_question';
+            }
+            return 'statement';
+        }
+        
+        // Hafızadan bağlam oluştur
+        function getMemoryContext() {
+            const context = {
+                recentMessages: efeMemory.shortTerm.slice(-3), // Son 3 mesaj
+                importantFacts: efeMemory.importantFacts.slice(-5), // Son 5 önemli gerçek
+                userPreferences: efeMemory.userPreferences,
+                conversationContext: efeMemory.conversationContext,
+                lastInteraction: efeMemory.lastInteraction
+            };
+            
+            return context;
+        }
+        
+        // Hafızayı temizle
+        function clearEfeMemory() {
+            efeMemory = {
+                shortTerm: [],
+                longTerm: [],
+                userPreferences: {},
+                conversationContext: {},
+                lastInteraction: null,
+                userMood: 'neutral',
+                topics: [],
+                importantFacts: []
+            };
+            console.log('🧠 Efe hafızası temizlendi');
+        }
+
+        // ======================================================
+        // ULTRA HIZLI YANIT SİSTEMİ (Efe Modu)
+        // ======================================================
+        
+        let responseCache = new Map(); // Yanıt önbelleği
+        let preloadQueue = []; // Önceden yükleme kuyruğu
+        let connectionPool = []; // Bağlantı havuzu
+        
+        // Hızlı yanıt için optimizasyonlar
+        function optimizeForSpeed() {
+            // 1. Bağlantı önceden kurma
+            preloadConnections();
+            
+            // 2. Önbellek temizleme
+            setInterval(() => {
+                if (responseCache.size > 100) {
+                    const keys = Array.from(responseCache.keys());
+                    keys.slice(0, 50).forEach(key => responseCache.delete(key));
+                }
+            }, 30000); // 30 saniyede bir temizle
+            
+            // 3. Tahmin edici yükleme
+            startPredictiveLoading();
+            
+            console.log('⚡ Ultra hızlı yanıt sistemi aktif');
+        }
+        
+        // Bağlantıları önceden kur
+        function preloadConnections() {
+            const preloadUrls = [
+                '/' // Sadece statik kökü ısıt
+            ];
+            
+            preloadUrls.forEach(url => {
+                fetch(url, {
+                    method: 'HEAD'
+                }).catch(() => {
+                    // Bağlantı kurulamadı, normal
+                });
+            });
+        }
+        
+        // Tahmin edici yükleme - Optimized
+        function startPredictiveLoading() {
+            // Kullanıcı yazmaya başladığında tahmin et - Debounced for performance
+            promptInput.addEventListener('input', () => {
+                debounce('predictive-loading', () => {
+                    if (promptInput.value.length > 3) {
+                        // Lazy load the prediction to avoid blocking UI
+                        lazyLoad(() => preloadPossibleResponses(promptInput.value), 100);
+                    }
+                }, 300); // Reduced from 500ms to 300ms for faster response
+            });
+        }
+        
+        // Olası yanıtları önceden yükle
+        function preloadPossibleResponses(input) {
+            const commonQuestions = [
+                'nasılsın',
+                'merhaba',
+                'teşekkür',
+                'yardım',
+                'kod',
+                'programlama'
+            ];
+            
+            const matchedQuestion = commonQuestions.find(q => 
+                input.toLowerCase().includes(q)
+            );
+            
+            if (matchedQuestion && !responseCache.has(matchedQuestion)) {
+                // Arka planda yanıtı hazırla
+                prepareQuickResponse(matchedQuestion);
+            }
+        }
+        
+        // Hızlı yanıt hazırla
+        async function prepareQuickResponse(question) {
+            try {
+                const quickResponse = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: 'user',
+                            parts: [{ text: question }]
+                        }],
+                        model: MODEL_NAME,
+                        isConversationMode: true,
+                        memoryContext: getMemoryContext()
+                    })
+                });
+                
+                if (quickResponse.ok) {
+                    const data = await quickResponse.json();
+                    const response = data.candidates[0]?.content?.parts[0]?.text;
+                    if (response) {
+                        responseCache.set(question, response);
+                        console.log('⚡ Hızlı yanıt önbelleğe alındı:', question);
+                    }
+                }
+            } catch (error) {
+                console.log('⚡ Hızlı yanıt hazırlama hatası:', error);
+            }
+        }
+        
+        // Önbellekten hızlı yanıt al
+        function getCachedResponse(input) {
+            const lowerInput = input.toLowerCase();
+            
+            for (const [key, value] of responseCache.entries()) {
+                if (lowerInput.includes(key)) {
+                    console.log('⚡ Önbellekten hızlı yanıt:', key);
+                    return value;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Hızlı yanıt göster
+        function showQuickResponse(response) {
+            const modelMessageData = { 
+                id: Date.now() + 1, 
+                role: "model", 
+                parts: [{ text: response }] 
+            };
+            
+            const modelMessageElement = displayMessage(response, "model", modelMessageData.id, null, false);
+            chatHistory.push(modelMessageData);
+            
+            // Sesli çıkış
+            if (isConversationMode && synthesis) {
+                setTimeout(() => {
+                    speakText(response);
+                }, 100);
+            }
+            
+            console.log('⚡ Hızlı yanıt gösterildi');
+        }
+
+        // ======================================================
+        // TÜRKÇE DOĞAL KONUŞMA - EFE KİŞİLİĞİ
+        // ======================================================
+        
+        const efePersonality = {
+            name: "Efe",
+            age: "25",
+            personality: {
+                traits: ["yardımsever", "samimi", "esprili", "akıllı", "sabırlı"],
+                mood: "pozitif",
+                communicationStyle: "casual",
+                humorLevel: "orta",
+                empathyLevel: "yüksek"
+            },
+            language: {
+                primary: "tr",
+                formality: "casual",
+                slang: true,
+                expressions: true,
+                regionalAccent: "istanbul"
+            },
+            interests: [
+                "teknoloji", "müzik", "spor", "yemek", "seyahat", 
+                "kitap", "film", "oyun", "sanat", "doğa"
+            ],
+            responses: {
+                greetings: [
+                    "Selam! Nasılsın?",
+                    "Merhaba! Ne var ne yok?",
+                    "Hey! Nasıl gidiyor?",
+                    "Selamlar! İyi misin?",
+                    "Merhaba! Bugün nasıl?"
+                ],
+                farewells: [
+                    "Görüşürüz!",
+                    "Hoşça kal!",
+                    "İyi günler!",
+                    "Sonra konuşuruz!",
+                    "Güle güle!"
+                ],
+                encouragements: [
+                    "Harika!",
+                    "Süper!",
+                    "Çok güzel!",
+                    "Mükemmel!",
+                    "Bravo!"
+                ],
+                apologies: [
+                    "Özür dilerim",
+                    "Pardon",
+                    "Kusura bakma",
+                    "Üzgünüm",
+                    "Affedersin"
+                ]
+            }
+        };
+        
+        // Efe'nin kişiliğine uygun yanıt üret
+        function enhanceEfeResponse(response, userMessage, context) {
+            let enhancedResponse = response;
+            
+            // 1. Türkçe ifadeler ekle
+            enhancedResponse = addTurkishExpressions(enhancedResponse, context.userMood);
+            
+            // 2. Efe'nin kişiliğini yansıt
+            enhancedResponse = addEfePersonality(enhancedResponse, context);
+            
+            // 3. Kullanıcının ruh haline uygun ton ayarla
+            enhancedResponse = adjustToneForMood(enhancedResponse, context.userMood);
+            
+            // 4. Doğal konuşma kalıpları ekle
+            enhancedResponse = addNaturalSpeechPatterns(enhancedResponse);
+            
+            return enhancedResponse;
+        }
+        
+        // Türkçe ifadeler ekle
+        function addTurkishExpressions(response, mood) {
+            const expressions = {
+                positive: ["harika", "süper", "mükemmel", "çok güzel", "bravo"],
+                neutral: ["tamam", "anladım", "tabii", "elbette", "kesinlikle"],
+                negative: ["üzgünüm", "pardon", "kusura bakma", "affedersin", "özür dilerim"]
+            };
+            
+            const moodExpressions = expressions[mood] || expressions.neutral;
+            const randomExpression = moodExpressions[Math.floor(Math.random() * moodExpressions.length)];
+            
+            // Yanıtın başına veya sonuna ifade ekle
+            if (Math.random() < 0.3) { // %30 ihtimalle
+                if (Math.random() < 0.5) {
+                    response = `${randomExpression}! ${response}`;
+                } else {
+                    response = `${response}. ${randomExpression}!`;
+                }
+            }
+            
+            return response;
+        }
+        
+        // Efe'nin kişiliğini yansıt
+        function addEfePersonality(response, context) {
+            // Yardımseverlik
+            if (response.includes('yardım') || response.includes('yardımcı')) {
+                response = response.replace('yardım', 'tabii ki yardım');
+                response = response.replace('yardımcı', 'elbette yardımcı');
+            }
+            
+            // Samimiyet
+            if (context.userMood === 'positive') {
+                response = response.replace('teşekkür', 'rica ederim');
+                response = response.replace('sağol', 'ne demek');
+            }
+            
+            // Esprili yaklaşım
+            if (Math.random() < 0.1) { // %10 ihtimalle espri ekle
+                const jokes = [
+                    " 😊",
+                    " 😄",
+                    " 😉",
+                    " 😎"
+                ];
+                response += jokes[Math.floor(Math.random() * jokes.length)];
+            }
+            
+            return response;
+        }
+        
+        // Ruh haline uygun ton ayarla
+        function adjustToneForMood(response, mood) {
+            switch (mood) {
+                case 'excited':
+                    // Sadece sözcük sınırlarında değiştir
+                    response = response.replace(/\biyi\b/g, 'süper');
+                    response = response.replace(/\bgüzel\b/g, 'harika');
+                    break;
+                    
+                case 'negative':
+                    // Sadece sözcük sınırlarında değiştir
+                    response = response.replace(/\biyi\b/g, 'anladım');
+                    response = response.replace(/\bgüzel\b/g, 'tamam');
+                    // Daha yumuşak ton
+                    response = response.replace(/!/g, '.');
+                    break;
+                    
+                case 'positive':
+                    // Sadece sözcük sınırlarında değiştir
+                    response = response.replace(/\biyi\b/g, 'çok iyi');
+                    response = response.replace(/\bgüzel\b/g, 'çok güzel');
+                    break;
+                    
+                default:
+                    // Neutral - değişiklik yok
+                    break;
+            }
+            
+            return response;
+        }
+        
+        // Doğal konuşma kalıpları ekle
+        function addNaturalSpeechPatterns(response) {
+            // Türkçe konuşma kalıpları - TEKRAR YAPMAYACAK ŞEKİLDE
+            const patterns = [
+                // Sadece sözcük sınırlarında değiştir (word boundary)
+                { from: /\bevet\b/gi, to: 'tabii ki' },
+                { from: /\bhayır\b/gi, to: 'maalesef' },
+                { from: /\btamam\b/gi, to: 'peki' }
+                // 'iyi' ve 'kötü' kaldırıldı - tekrar yaratıyor
+            ];
+            
+            patterns.forEach(pattern => {
+                response = response.replace(pattern.from, pattern.to);
+            });
+            
+            return response;
+        }
+        
+        // Efe'nin kişiliğini güncelle
+        function updateEfePersonality(interaction) {
+            // Kullanıcı etkileşimlerine göre kişiliği geliştir
+            if (interaction.userMood === 'positive') {
+                efePersonality.personality.mood = 'pozitif';
+            } else if (interaction.userMood === 'negative') {
+                efePersonality.personality.empathyLevel = 'çok yüksek';
+            }
+            
+            // İlgi alanlarını güncelle
+            const topic = interaction.conversationContext?.currentTopic;
+            if (topic && !efePersonality.interests.includes(topic)) {
+                efePersonality.interests.push(topic);
+            }
+            
+            console.log('🎭 Efe kişiliği güncellendi:', efePersonality);
+        }
+
+        // ======================================================
+        // GÖRSEL ANALİZ SİSTEMİ (Efe Modu)
+        // ======================================================
+        
+        let imageAnalysisCache = new Map(); // Görsel analiz önbelleği
+        
+        // Görsel analiz sistemi başlat
+        function initImageAnalysis() {
+            console.log('🔍 Görsel analiz sistemi hazır');
+            
+            // Görsel analiz butonları
+            setupImageAnalysisButtons();
+        }
+        
+        // Ekran görüntüsü alma
+        function setupScreenshotCapture() {
+            // Ekran görüntüsü butonunu ekle
+            const screenshotBtn = document.createElement('button');
+            screenshotBtn.id = 'screenshot-btn';
+            screenshotBtn.className = 'voice-btn';
+            screenshotBtn.title = 'Ekran Görüntüsü Al';
+            screenshotBtn.innerHTML = '<i class="fas fa-camera"></i>';
+            
+            screenshotBtn.addEventListener('click', async () => {
+                try {
+                    const canvas = await captureScreenshot();
+                    const imageData = canvas.toDataURL('image/png');
+                    await analyzeScreenshot(imageData);
+                } catch (error) {
+                    console.error('🔍 Ekran görüntüsü hatası:', error);
+                    alert('Ekran görüntüsü alınamadı. Lütfen manuel olarak bir resim yükleyin.');
+                }
+            });
+            
+            // Upload button'dan sonra ekle
+            const uploadBtn = document.getElementById('upload-button');
+            if (uploadBtn && uploadBtn.parentNode) {
+                uploadBtn.parentNode.insertBefore(screenshotBtn, uploadBtn.nextSibling);
+            }
+        }
+        
+        // Ekran görüntüsü yakala
+        async function captureScreenshot() {
+            try {
+                // Tarayıcı API'sini kullan
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { mediaSource: 'screen' }
+                });
+                
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.play();
+                
+                await new Promise(resolve => {
+                    video.onloadedmetadata = () => {
+                        video.width = video.videoWidth;
+                        video.height = video.videoHeight;
+                        resolve();
+                    };
+                });
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = video.width;
+                canvas.height = video.height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                
+                // Stream'i durdur
+                stream.getTracks().forEach(track => track.stop());
+                
+                return canvas;
+            } catch (error) {
+                console.error('Ekran yakalama hatası:', error);
+                throw error;
+            }
+        }
+        
+        // Ekran görüntüsünü analiz et
+        async function analyzeScreenshot(imageData) {
+            console.log('🔍 Ekran görüntüsü analiz ediliyor...');
+            
+            const base64Data = imageData.split(',')[1];
+            
+            // Efe Modu'nda görseli analiz et
+            const userMessage = 'Bu ekran görüntüsünü analiz et ve ne gördüğünü anlat.';
+            
+            const userMessageData = { 
+                id: Date.now(), 
+                role: "user", 
+                parts: [{ text: userMessage }] 
+            };
+            displayMessage(userMessage, "user", userMessageData.id, null, false);
+            chatHistory.push(userMessageData);
+            
+            // Görsel ile birlikte mesaj gönder
+            try {
+                const response = await sendNormalResponse(
+                    chatHistory,
+                    MODEL_NAME,
+                    { base64Data: base64Data, mimeType: 'image/png' },
+                    true
+                );
+                
+                console.log('🔍 Görsel analiz tamamlandı');
+            } catch (error) {
+                console.error('🔍 Görsel analiz hatası:', error);
+            }
+        }
+        
+        // Görsel analiz butonlarını kur
+        function setupImageAnalysisButtons() {
+            // Görsel analiz için ek butonlar eklenebilir
+        }
+        
+        // Görsel içeriğini tanımla
+        function detectImageContent(imageData) {
+            // Temel görsel içerik tanıma
+            const analysis = {
+                type: 'unknown',
+                objects: [],
+                text: '',
+                colors: [],
+                metadata: {}
+            };
+            
+            // Görsel meta verilerini çıkar
+            const img = new Image();
+            img.src = imageData;
+            
+            return analysis;
+        }
+
+        // Sesli konuşma sistemi zaten yukarıda tanımlı (1434-1460 satırları)
+        // Sadece Efe Modu için ekstra fonksiyonlar
+        
+        // Efe Modu için sesli giriş yönetimi
+        function toggleListening() {
+            if (!recognition) {
+                console.warn('🎤 Ses tanıma henüz hazır değil');
+                return;
+            }
+            
+            if (isListening) {
+                recognition.stop();
+                voiceInputBtn.classList.remove('active');
+                voiceInputBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                // Kapat: konuşma modalı ve durum
+                closeConversationModal();
+            } else {
+                try {
+                    recognition.start();
+                    voiceInputBtn.classList.add('active');
+                    voiceInputBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                } catch (error) {
+                    console.error('🎤 Ses tanıma başlatma hatası:', error);
+                }
+            }
+        }
+        
+        // Efe Modu için sesli çıkış
+        let synthesis = window.speechSynthesis || null;
+        let isSpeaking = false;
+        
+        function speakText(text) {
+            if (!synthesis) return;
+            
+            synthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'tr-TR';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.8;
+            
+            const voices = synthesis.getVoices();
+            const turkishVoice = voices.find(voice => 
+                voice.lang.startsWith('tr') || 
+                voice.name.includes('Turkish') ||
+                voice.name.includes('Türkçe')
+            );
+            
+            if (turkishVoice) {
+                utterance.voice = turkishVoice;
+            }
+            
+            utterance.onstart = () => {
+                isSpeaking = true;
+                if (voiceOutputBtn) voiceOutputBtn.classList.add('speaking');
+            };
+            
+            utterance.onend = () => {
+                isSpeaking = false;
+                if (voiceOutputBtn) voiceOutputBtn.classList.remove('speaking');
+            };
+            
+            utterance.onerror = () => {
+                isSpeaking = false;
+                if (voiceOutputBtn) voiceOutputBtn.classList.remove('speaking');
+            };
+            
+            synthesis.speak(utterance);
+        }
+        
+        function stopSpeaking() {
+            if (synthesis) {
+                synthesis.cancel();
+                isSpeaking = false;
+                if (voiceOutputBtn) voiceOutputBtn.classList.remove('speaking');
+            }
+        }
+        
+        function speakLastResponse() {
+            const lastMessage = chatHistory[chatHistory.length - 1];
+            if (lastMessage && lastMessage.role === 'model') {
+                const text = lastMessage.parts[0].text;
+                speakText(text);
+            }
+        }
+        
+        // ======================================================
+        // PERFORMANS OPTİMİZASYONLARI
+        // ======================================================
+        
+        // Performance optimization: Debounced functions with timestamps
+        let debounceTimers = new Map();
+        function debounce(key, func, delay = 300) {
+            clearTimeout(debounceTimers.get(key)?.timer);
+            debounceTimers.set(key, {
+                timer: setTimeout(func, delay),
+                timestamp: Date.now()
+            });
+        }
+
+        // Performance optimization: Throttled functions with timestamps
+        let throttleTimers = new Map();
+        function throttle(key, func, delay = 100) {
+            if (!throttleTimers.has(key)) {
+                throttleTimers.set(key, {
+                    active: true,
+                    timestamp: Date.now()
+                });
+                func();
+                setTimeout(() => throttleTimers.delete(key), delay);
+            }
+        }
+
+        // Performance optimization: RequestAnimationFrame for smooth animations
+        let animationFrameId;
+        function smoothScroll(element, targetY) {
+            cancelAnimationFrame(animationFrameId);
+            const startY = element.scrollTop;
+            const distance = targetY - startY;
+            const duration = 300;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const ease = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                
+                element.scrollTop = startY + distance * ease;
+                
+                if (progress < 1) {
+                    animationFrameId = requestAnimationFrame(animation);
+                }
+            }
+            
+            animationFrameId = requestAnimationFrame(animation);
+        }
+
+        // Performance optimization: Memoization for expensive operations
+        const memoCache = new Map();
+        function memoize(key, fn) {
+            if (memoCache.has(key)) {
+                return memoCache.get(key);
+            }
+            const result = fn();
+            memoCache.set(key, result);
+            return result;
+        }
+
+        // Performance optimization: Lazy loading for heavy operations
+        function lazyLoad(fn, delay = 0) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(fn());
+                }, delay);
+            });
+        }
+
+        // Memory management: Clean up old data
+        function cleanupMemory() {
+            // Clear old debounce timers
+            debounceTimers.forEach((timer, key) => {
+                if (Date.now() - timer.timestamp > 60000) { // 1 minute old
+                    clearTimeout(timer);
+                    debounceTimers.delete(key);
+                }
+            });
+
+            // Clear old throttle timers
+            throttleTimers.forEach((timer, key) => {
+                if (Date.now() - timer.timestamp > 30000) { // 30 seconds old
+                    throttleTimers.delete(key);
+                }
+            });
+
+            // Clear old memo cache entries
+            if (memoCache.size > 100) {
+                const entries = Array.from(memoCache.entries());
+                const toDelete = entries.slice(0, 50); // Remove oldest 50 entries
+                toDelete.forEach(([key]) => memoCache.delete(key));
+            }
+        }
+
+        // Run cleanup every 5 minutes
+        setInterval(cleanupMemory, 300000);
+
+        // Performance monitoring
+        let performanceMetrics = {
+            apiCalls: 0,
+            cacheHits: 0,
+            renderTime: 0,
+            memoryUsage: 0
+        };
+
+        function trackPerformance(metric, value) {
+            performanceMetrics[metric] = (performanceMetrics[metric] || 0) + value;
+            
+            // Log performance every 100 API calls
+            if (performanceMetrics.apiCalls % 100 === 0) {
+                console.log('📊 Performance Metrics:', performanceMetrics);
+            }
+        }
+
+        // Var olan ses tanıma sistemine listener ekle
+        function initVoiceSystem() {
+            if (recognition) {
+                console.log('🎤 Sesli konuşma sistemi hazır');
+            } else {
+                console.warn('🎤 Sesli konuşma desteği yok');
+            }
+        }
+
         // Olay dinleyicileri (DOM Ready içinde)
         document.addEventListener('DOMContentLoaded', () => {
              console.log("DOM Yüklendi, event listener'lar ekleniyor."); 
+             
+        // Optimized LocalStorage management
+        const STORAGE_KEYS = {
+            CHAT_HISTORY: 'bilio_chat_history',
+            SETTINGS: 'bilio_settings',
+            CACHE: 'bilio_cache'
+        };
+
+        // Smart localStorage management
+        function optimizeLocalStorage() {
+            try {
+                // Check available space
+                const testData = JSON.stringify({ test: "data" });
+                localStorage.setItem('test', testData);
+                localStorage.removeItem('test');
+                
+                // Clean old cache entries
+                const cache = JSON.parse(localStorage.getItem(STORAGE_KEYS.CACHE) || '{}');
+                const now = Date.now();
+                const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+                
+                Object.keys(cache).forEach(key => {
+                    if (now - cache[key].timestamp > maxAge) {
+                        delete cache[key];
+                    }
+                });
+                
+                localStorage.setItem(STORAGE_KEYS.CACHE, JSON.stringify(cache));
+                console.log("✅ LocalStorage optimized");
+                
+            } catch (e) {
+                console.warn("⚠️ LocalStorage quota exceeded, cleaning...");
+                // Keep only essential data
+                const essential = {
+                    [STORAGE_KEYS.SETTINGS]: localStorage.getItem(STORAGE_KEYS.SETTINGS)
+                };
+                localStorage.clear();
+                Object.entries(essential).forEach(([key, value]) => {
+                    if (value) localStorage.setItem(key, value);
+                });
+            }
+        }
+
+        // Run optimization on load
+        optimizeLocalStorage();
+        
+        // Clear cache button for debugging
+        function clearAllCache() {
+            localStorage.clear();
+            sessionStorage.clear();
+            console.log("✅ Tüm cache temizlendi");
+            alert("Cache temizlendi! Sayfayı yenileyin.");
+        }
+        
+        // Add clear cache button to console for debugging
+        window.clearCache = clearAllCache;
+        console.log("🔧 Debug: window.clearCache() fonksiyonunu kullanarak cache'i temizleyebilirsiniz");
              
              if (sendButton && promptInput) { 
                  sendButton.addEventListener("click", sendMessage);
@@ -1110,6 +3326,30 @@
                     if (event.key === "Enter" && !sendButton.disabled) { event.preventDefault(); sendMessage(); }
                  });
              }
+              
+              // Sesli konuşma event listener'ları
+              if (voiceInputBtn) {
+                  voiceInputBtn.addEventListener("click", toggleListening);
+              }
+              
+              if (voiceOutputBtn) {
+                  voiceOutputBtn.addEventListener("click", () => {
+                      if (isSpeaking) {
+                          stopSpeaking();
+                      } else {
+                          speakLastResponse();
+                      }
+                  });
+              }
+              
+              // Sesli konuşma sistemini başlat
+              initVoiceSystem();
+              
+              // Ultra hızlı yanıt sistemini başlat
+              optimizeForSpeed();
+              
+              // Görsel analiz sistemini başlat
+              initImageAnalysis();
              if (newChatBtnSidebar) { newChatBtnSidebar.addEventListener("click", () => startNewChat(false)); } 
              if (deleteAllBtn) { deleteAllBtn.addEventListener("click", deleteAllChats); }
              
@@ -1117,7 +3357,7 @@
              
              // Resim Yükleme Butonları
              if (uploadButton) {
-                 uploadButton.addEventListener('click', () => fileInput.click());
+                uploadButton.addEventListener('click', () => fileInput.click());
              }
              if (fileInput) {
                  fileInput.addEventListener('change', handleFileSelect);
@@ -1329,19 +3569,20 @@
              } else { console.error("#close-output-btn bulunamadı!"); }
              
              // Mobil Menü Butonları
-             if (menuToggleBtn) {
-                 menuToggleBtn.addEventListener('click', () => {
-                     bodyElement.classList.add('sidebar-visible');
-                 });
-             }
-             if (sidebarOverlay) {
-                 sidebarOverlay.addEventListener('click', () => {
-                      bodyElement.classList.remove('sidebar-visible');
-                 });
-             }
+            if (menuToggleBtn) {
+                menuToggleBtn.addEventListener('click', () => {
+                    bodyElement.classList.toggle('sidebar-collapsed');
+                });
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', () => {
+                     bodyElement.classList.add('sidebar-collapsed');
+                });
+            }
              
-             // Başlangıç durumunu ayarla
-             loadChats(); 
+            // Başlangıç durumunu ayarla
+            document.body.classList.add('sidebar-collapsed');
+            loadChats(); 
              if (promptInput) promptInput.focus();
         });
 
